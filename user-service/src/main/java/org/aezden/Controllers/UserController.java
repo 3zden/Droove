@@ -2,13 +2,13 @@ package org.aezden.Controllers;
 
 import org.aezden.DTO.UserLoginRequest;
 import org.aezden.DTO.UserRegisterRequest;
+import org.aezden.Entities.User;
 import org.aezden.Services.UserService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 public class UserController {
 
     UserService userService;
@@ -16,12 +16,12 @@ public class UserController {
     public UserController(UserService userService){
         this.userService = userService;
     }
-    @PostMapping("/auth/login")
+    @PostMapping("/users/login")
     public String login(@RequestBody UserLoginRequest userLoginRequest){
         return userService.login(userLoginRequest);
     }
     @PostMapping("/users/register")
-    public String register(@RequestBody UserRegisterRequest userRegisterRequest){
+    public User register(@RequestBody UserRegisterRequest userRegisterRequest){
         return userService.register(userRegisterRequest);
     }
 }
