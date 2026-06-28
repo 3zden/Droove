@@ -23,11 +23,13 @@ public class UserService {
         return "";
     }
 
-    public String register(UserRegisterRequest userRegisterRequest) {
-        userRepository.save(new User(userRegisterRequest.email(),
+    public User register(UserRegisterRequest userRegisterRequest) {
+        User tempUser = new User(userRegisterRequest.email(),
                 userRegisterRequest.firstName(),
                 userRegisterRequest.lastName(),
-                userRegisterRequest.password()));
-        return "";
+                userRegisterRequest.password());
+        System.out.println(tempUser);
+        userRepository.save(tempUser);
+        return tempUser;
     }
 }
