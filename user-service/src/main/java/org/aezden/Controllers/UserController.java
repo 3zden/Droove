@@ -18,7 +18,7 @@ public class UserController {
     }
 
     @PostMapping("/users/login")
-    public String login(@RequestBody UserLoginRequest userLoginRequest){
+    public User login(@RequestBody UserLoginRequest userLoginRequest){
         System.out.println("enter login controller");
         return userService.login(userLoginRequest);
     }
