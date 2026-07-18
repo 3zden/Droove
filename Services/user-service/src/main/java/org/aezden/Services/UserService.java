@@ -16,11 +16,15 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public String login(UserLoginRequest userLoginRequest) {
+    public User login(UserLoginRequest userLoginRequest) {
         if (userRepository.existsUserByEmail(userLoginRequest.email())){
+            System.out.println("usr found");
              User user = userRepository.findByEmail(userLoginRequest.email());
+            System.out.println(user);
+             return user;
         }
-        return "";
+        System.out.println("user not found!!");
+        return new User();
     }
 
     public User register(UserRegisterRequest userRegisterRequest) {

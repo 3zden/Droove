@@ -13,10 +13,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http){
         return http
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(rs -> rs
-                        .requestMatchers("/users/**").permitAll()
+                        .requestMatchers("/users/register","/users/login").permitAll()
                         .anyRequest().authenticated())
                 .oauth2Login(Customizer.withDefaults())
+                .addFilterBefore()
                 .build();
     }
 }
