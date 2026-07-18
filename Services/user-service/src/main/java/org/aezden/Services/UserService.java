@@ -18,10 +18,12 @@ public class UserService {
 
     public User login(UserLoginRequest userLoginRequest) {
         if (userRepository.existsUserByEmail(userLoginRequest.email())){
+            System.out.println("usr found");
              User user = userRepository.findByEmail(userLoginRequest.email());
+            System.out.println(user);
              return user;
         }
-
+        System.out.println("user not found!!");
         return new User();
     }
 
