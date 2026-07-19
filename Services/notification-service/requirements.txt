@@ -1,0 +1,4 @@
+fastapi>=0.115
+uvicorn[standard]>=0.30
+aiokafka>=0.11
+PyJWT>=2.9
