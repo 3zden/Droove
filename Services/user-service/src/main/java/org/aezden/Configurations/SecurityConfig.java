@@ -18,7 +18,7 @@ public class SecurityConfig {
                         .requestMatchers("/users/register","/users/login").permitAll()
                         .anyRequest().authenticated())
                 .oauth2Login(Customizer.withDefaults())
-                .addFilterBefore()
+//                .addFilterBefore()
                 .build();
     }
 }
