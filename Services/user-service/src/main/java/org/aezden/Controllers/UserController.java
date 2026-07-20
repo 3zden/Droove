@@ -4,9 +4,7 @@ import org.aezden.DTO.UserLoginRequest;
 import org.aezden.DTO.UserRegisterRequest;
 import org.aezden.Entities.User;
 import org.aezden.Services.UserService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class UserController {
@@ -27,5 +25,10 @@ public class UserController {
     public User register(@RequestBody UserRegisterRequest userRegisterRequest){
         System.out.println("enter register controller");
         return userService.register(userRegisterRequest);
+    }
+
+    @GetMapping("/users/me")
+    public User getCurrentUser(@RequestHeader("User-Email") String email){
+        return userService.getCurrentUser(email);
     }
 }

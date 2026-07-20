@@ -20,6 +20,7 @@ public class User {
     private String email;
     private String password;
     private Date createdAt;
+    
 
     public User(String email, String firstName, String lastName, String password){
         this.email = email;
