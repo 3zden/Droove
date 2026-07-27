@@ -31,3 +31,12 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Droove ###
+.env
+node_modules/
+dist/
+__pycache__/
+.venv/
+.terraform/
+*.tfstate*
