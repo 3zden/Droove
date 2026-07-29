@@ -4,7 +4,7 @@ import type { AuthResponse, LoginRequest, RegisterRequest, UserResponse } from '
 
 const STORAGE_KEY = 'droove.auth';
 
-interface Session {
+export interface Session {
   token: string;
   user: UserResponse;
 }

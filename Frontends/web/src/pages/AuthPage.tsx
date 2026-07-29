@@ -128,7 +128,11 @@ export function AuthPage({ loading, error, onLogin, onRegister }: AuthPageProps)
                   </p>
                 )}
                 <button type="submit" className={styles.submit} disabled={loading}>
-                  {loading ? 'Logging in...' : 'Log in'}
+                  {loading ? 'Logging in...' : (
+                    <>
+                      Log in <span aria-hidden="true">&rarr;</span>
+                    </>
+                  )}
                 </button>
               </form>
             </>
@@ -216,7 +220,11 @@ export function AuthPage({ loading, error, onLogin, onRegister }: AuthPageProps)
                   </p>
                 )}
                 <button type="submit" className={styles.submit} disabled={loading}>
-                  {loading ? 'Creating account...' : 'Create account'}
+                  {loading ? 'Creating account...' : (
+                    <>
+                      Create account <span aria-hidden="true">&rarr;</span>
+                    </>
+                  )}
                 </button>
               </form>
             </>

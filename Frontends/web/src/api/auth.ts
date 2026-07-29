@@ -1,6 +1,6 @@
 import type { AuthResponse, LoginRequest, RegisterRequest } from '../types/auth';
 
-export const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8080/api/users';
+export const API_URL = import.meta.env.VITE_USER_API_URL ?? 'http://localhost:8101/api/users';
 
 // EXERCISE (see BRIEFING-AUTH.md): wire this up to `POST ${API_URL}/login`.
 export async function login(_credentials: LoginRequest): Promise<AuthResponse> {
