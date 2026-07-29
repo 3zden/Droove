@@ -40,3 +40,6 @@ __pycache__/
 .venv/
 .terraform/
 *.tfstate*
+
+# Claude-generated planning/teaching/explainer docs - not project deliverables
+BRIEFING*.md

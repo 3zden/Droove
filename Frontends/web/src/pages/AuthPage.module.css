@@ -1,0 +1,266 @@
+.page {
+  min-height: 100dvh;
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 900px) {
+  .page {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.brandPanel {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+  padding: 64px;
+  background: linear-gradient(160deg, var(--accent) 0%, var(--accent-hover) 100%);
+  color: var(--accent-contrast);
+}
+
+@media (min-width: 900px) {
+  .brandPanel {
+    display: flex;
+  }
+}
+
+.brandMark {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.brandHeadline {
+  font-size: clamp(28px, 3vw, 40px);
+  line-height: 1.15;
+  font-weight: 600;
+  margin: 0;
+  max-width: 18ch;
+}
+
+.brandBody {
+  font-size: 16px;
+  line-height: 1.5;
+  max-width: 38ch;
+  opacity: 0.92;
+  margin: 0;
+}
+
+.formPanel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.card {
+  width: 100%;
+  max-width: 400px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow);
+  padding: 32px 28px;
+}
+
+.mobileBrand {
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--accent);
+  margin: 0 0 20px;
+}
+
+@media (min-width: 900px) {
+  .mobileBrand {
+    display: none;
+  }
+}
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  padding: 4px;
+  margin-bottom: 24px;
+}
+
+.tab {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 8px 12px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.tab:active {
+  transform: scale(0.98);
+}
+
+.tabActive {
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.heading {
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0 0 4px;
+  color: var(--text);
+}
+
+.subheading {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin: 0 0 24px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.row {
+  display: flex;
+  gap: 12px;
+}
+
+.row > .field {
+  flex: 1;
+  min-width: 0;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.inputWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-input);
+  padding: 10px 12px;
+  font-size: 15px;
+  background: var(--surface);
+  color: var(--text);
+}
+
+.input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.passwordToggle {
+  position: absolute;
+  right: 8px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  border-radius: 6px;
+}
+
+.passwordToggle:focus-visible {
+  outline: 2px solid var(--accent);
+}
+
+.roleGroup {
+  display: flex;
+  gap: 8px;
+}
+
+.rolePill {
+  flex: 1;
+  position: relative;
+}
+
+.roleInput {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.roleLabel {
+  display: block;
+  text-align: center;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-muted);
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.roleInput:checked + .roleLabel {
+  background: var(--accent-bg);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.roleInput:focus-visible + .roleLabel {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.error {
+  font-size: 13px;
+  color: var(--danger);
+  background: var(--danger-bg);
+  border-radius: var(--radius-input);
+  padding: 10px 12px;
+  margin: 0;
+}
+
+.submit {
+  border: none;
+  border-radius: var(--radius-pill);
+  padding: 12px 16px;
+  font-size: 15px;
+  font-weight: 600;
+  background: var(--accent);
+  color: var(--accent-contrast);
+  cursor: pointer;
+  margin-top: 4px;
+}
+
+.submit:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+.submit:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.submit:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
