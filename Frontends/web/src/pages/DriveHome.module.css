@@ -1,0 +1,201 @@
+.page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 32px 24px 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+}
+
+.title {
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  margin: 0;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow);
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.toggleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.toggleLabel {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.toggleSub {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 2px 0 0;
+}
+
+.switch {
+  position: relative;
+  width: 52px;
+  height: 30px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+  background: var(--surface-raised);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.switchOn {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.switchKnob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.2s ease;
+}
+
+.switchOn .switchKnob {
+  transform: translateX(22px);
+}
+
+.mapContainer {
+  height: 280px;
+  width: 100%;
+  border-radius: var(--radius-input);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.button {
+  position: relative;
+  overflow: hidden;
+  align-self: flex-start;
+  border: none;
+  border-radius: var(--radius-pill);
+  padding: 12px 24px;
+  line-height: 40px;
+  font-size: 10.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.75px;
+  background: var(--pill-fill);
+  color: var(--pill-text);
+  box-shadow: var(--pill-shadow);
+  cursor: pointer;
+}
+
+.button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--pill-hover-gradient);
+  mix-blend-mode: luminosity;
+  opacity: 0;
+  transition: 0.3s opacity ease-in-out, 0.3s background;
+}
+
+.button:hover:not(:disabled)::before {
+  opacity: var(--pill-hover-intensity);
+  transition: 0.7s opacity ease-in-out, 0.7s background;
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.buttonRow {
+  display: flex;
+  gap: 12px;
+}
+
+.buttonSecondary {
+  composes: button;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  box-shadow: none;
+}
+
+.statusText {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.error {
+  font-size: 13px;
+  color: var(--danger);
+  background: var(--danger-bg);
+  border-radius: var(--radius-input);
+  padding: 10px 12px;
+  margin: 0;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 20;
+}
+
+.offerCard {
+  width: 100%;
+  max-width: 360px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow);
+  padding: 28px;
+  text-align: center;
+}
+
+.offerCountdown {
+  font-size: 13px;
+  color: var(--accent);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 0 0 8px;
+}
+
+.offerFare {
+  font-size: 34px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 4px;
+}
+
+.offerSub {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 0 0 20px;
+}
+
+.offerButtons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}

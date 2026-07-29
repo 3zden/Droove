@@ -1,0 +1,167 @@
+.page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 32px 24px 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+}
+
+.title {
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  margin: 0;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow);
+  padding: 28px;
+}
+
+.balanceLabel {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 0 0 8px;
+}
+
+.balanceValue {
+  font-size: 40px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin: 0;
+}
+
+.cardHeading {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 16px;
+}
+
+.form {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.input {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-input);
+  padding: 10px 12px;
+  font-size: 15px;
+  background: var(--surface-raised);
+  color: var(--text);
+}
+
+.input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.button {
+  position: relative;
+  overflow: hidden;
+  border: none;
+  border-radius: var(--radius-pill);
+  padding: 12px 24px;
+  line-height: 40px;
+  font-size: 10.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.75px;
+  background: var(--pill-fill);
+  color: var(--pill-text);
+  box-shadow: var(--pill-shadow);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--pill-hover-gradient);
+  mix-blend-mode: luminosity;
+  opacity: 0;
+  transition: 0.3s opacity ease-in-out, 0.3s background;
+}
+
+.button:hover:not(:disabled)::before {
+  opacity: var(--pill-hover-intensity);
+  transition: 0.7s opacity ease-in-out, 0.7s background;
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.ledgerList {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ledgerRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-input);
+  font-size: 14px;
+}
+
+.ledgerType {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.ledgerDate {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.ledgerAmount {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.empty {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 12px 0 0;
+}
+
+.error {
+  font-size: 13px;
+  color: var(--danger);
+  background: var(--danger-bg);
+  border-radius: var(--radius-input);
+  padding: 10px 12px;
+  margin: 12px 0 0;
+}

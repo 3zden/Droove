@@ -1,0 +1,141 @@
+.page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 32px 24px 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+}
+
+.title {
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  margin: 0;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow);
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.quoteRow {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.quoteStat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.quoteLabel {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.quoteValue {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.button {
+  position: relative;
+  overflow: hidden;
+  align-self: flex-start;
+  border: none;
+  border-radius: var(--radius-pill);
+  padding: 12px 24px;
+  line-height: 40px;
+  font-size: 10.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.75px;
+  background: var(--pill-fill);
+  color: var(--pill-text);
+  box-shadow: var(--pill-shadow);
+  cursor: pointer;
+}
+
+.button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--pill-hover-gradient);
+  mix-blend-mode: luminosity;
+  opacity: 0;
+  transition: 0.3s opacity ease-in-out, 0.3s background;
+}
+
+.button:hover:not(:disabled)::before {
+  opacity: var(--pill-hover-intensity);
+  transition: 0.7s opacity ease-in-out, 0.7s background;
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.buttonDanger {
+  composes: button;
+  background: transparent;
+  border: 1px solid var(--danger);
+  color: var(--danger);
+  box-shadow: none;
+}
+
+.statusPanel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.statusText {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.statusSub {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 2px 0 0;
+}
+
+.receiptRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: var(--text);
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.receiptRow:last-child {
+  border-bottom: none;
+  font-weight: 600;
+}
+
+.error {
+  font-size: 13px;
+  color: var(--danger);
+  background: var(--danger-bg);
+  border-radius: var(--radius-input);
+  padding: 10px 12px;
+  margin: 0;
+}
