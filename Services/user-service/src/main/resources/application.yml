@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: user-service
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/droove}
+    username: ${POSTGRES_USER:droove}
+    password: ${POSTGRES_PASSWORD:droove_local}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        default_schema: users_svc
+    show-sql: true
+
+server:
+  servlet:
+    context-path: /api/users

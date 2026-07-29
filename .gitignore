@@ -31,3 +31,15 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Droove ###
+.env
+node_modules/
+dist/
+__pycache__/
+.venv/
+.terraform/
+*.tfstate*
+
+# Claude-generated planning/teaching/explainer docs - not project deliverables
+BRIEFING*.md

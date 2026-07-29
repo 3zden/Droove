@@ -19,13 +19,18 @@ public class User {
     private String lastName;
     private String email;
     private String password;
+    @Enumerated(EnumType.STRING)
+    private Role role;
+    private String vehiclePlate;
     private Date createdAt;
 
-    public User(String email, String firstName, String lastName, String password){
+    public User(String email, String firstName, String lastName, String password, Role role, String vehiclePlate){
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
+        this.role = role;
+        this.vehiclePlate = vehiclePlate;
         this.createdAt = new Date();
     }
 }

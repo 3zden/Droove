@@ -1,39 +1,55 @@
 package org.aezden.Services;
 
+import org.aezden.DTO.AuthResponse;
 import org.aezden.DTO.UserLoginRequest;
 import org.aezden.DTO.UserRegisterRequest;
+import org.aezden.DTO.UserResponse;
 import org.aezden.Entities.User;
 import org.aezden.Repository.UserRepository;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.UUID;
 
 @Service
 public class UserService {
 
-    UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
-    public UserService(UserRepository userRepository){
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
-    public User login(UserLoginRequest userLoginRequest) {
-        if (userRepository.existsUserByEmail(userLoginRequest.email())){
-            System.out.println("usr found");
-             User user = userRepository.findByEmail(userLoginRequest.email());
-            System.out.println(user);
-             return user;
+    public AuthResponse register(UserRegisterRequest request) {
+        if (request.role() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "role is required");
         }
-        System.out.println("user not found!!");
-        return new User();
+        if (userRepository.existsUserByEmail(request.email())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "email already registered");
+        }
+        User user = new User(request.email(), request.firstName(), request.lastName(),
+                passwordEncoder.encode(request.password()), request.role(), request.vehiclePlate());
+        userRepository.save(user);
+        return new AuthResponse(jwtService.generateToken(user), UserResponse.from(user));
     }
 
-    public User register(UserRegisterRequest userRegisterRequest) {
-        User tempUser = new User(userRegisterRequest.email(),
-                userRegisterRequest.firstName(),
-                userRegisterRequest.lastName(),
-                userRegisterRequest.password());
-        System.out.println(tempUser);
-        userRepository.save(tempUser);
-        return tempUser;
+    public AuthResponse login(UserLoginRequest request) {
+        User user = userRepository.findByEmail(request.email());
+        if (user == null || !passwordEncoder.matches(request.password(), user.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "invalid credentials");
+        }
+        return new AuthResponse(jwtService.generateToken(user), UserResponse.from(user));
+    }
+
+    public UserResponse getCurrentUser(UUID userId) {
+        return userRepository.findById(userId)
+                .map(UserResponse::from)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 }

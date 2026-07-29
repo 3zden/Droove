@@ -1,31 +1,37 @@
 package org.aezden.Controllers;
 
+import org.aezden.DTO.AuthResponse;
 import org.aezden.DTO.UserLoginRequest;
 import org.aezden.DTO.UserRegisterRequest;
-import org.aezden.Entities.User;
+import org.aezden.DTO.UserResponse;
 import org.aezden.Services.UserService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 public class UserController {
 
-    UserService userService;
+    private final UserService userService;
 
-    public UserController(UserService userService){
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
-    @PostMapping("/users/login")
-    public User login(@RequestBody UserLoginRequest userLoginRequest){
-        System.out.println("enter login controller");
-        return userService.login(userLoginRequest);
+    @PostMapping("/register")
+    @ResponseStatus(HttpStatus.CREATED)
+    public AuthResponse register(@RequestBody UserRegisterRequest request) {
+        return userService.register(request);
     }
 
-    @PostMapping("/users/register")
-    public User register(@RequestBody UserRegisterRequest userRegisterRequest){
-        System.out.println("enter register controller");
-        return userService.register(userRegisterRequest);
+    @PostMapping("/login")
+    public AuthResponse login(@RequestBody UserLoginRequest request) {
+        return userService.login(request);
+    }
+
+    @GetMapping("/me")
+    public UserResponse getCurrentUser(@RequestHeader("X-User-Id") UUID userId) {
+        return userService.getCurrentUser(userId);
     }
 }
