@@ -17,8 +17,9 @@ public class Trip {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID tripId;
+    private UUID userId;
     private UUID driverId;
-    private Double fare;
+    private Long fare;
     private double[] pickUp;
     private double[] destination;
     private Date requestedAt;
@@ -31,7 +32,7 @@ public class Trip {
         this.pickUp = pickUp;
         this.destination = destination;
         this.requestedAt = new Date();
-        this.fare = 0.0;
+        this.fare = 0L;
     }
 
     public Trip() {
