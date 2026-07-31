@@ -16,6 +16,22 @@
   margin: 0;
 }
 
+.rideLink {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin: -12px 0 0;
+}
+
+.rideLink a {
+  color: var(--accent-strong);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.rideLink a:hover {
+  text-decoration: underline;
+}
+
 .card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -70,12 +86,11 @@
   align-self: flex-start;
   border: none;
   border-radius: var(--radius-pill);
-  padding: 12px 24px;
-  line-height: 40px;
-  font-size: 10.5px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.75px;
+  padding: var(--btn-padding);
+  line-height: var(--btn-line-height);
+  font-size: var(--btn-font-size);
+  font-weight: var(--btn-font-weight);
+  letter-spacing: var(--btn-letter-spacing);
   background: var(--pill-fill);
   color: var(--pill-text);
   box-shadow: var(--pill-shadow);

@@ -1,4 +1,5 @@
 import { useEffect, useState, type FormEvent } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuthContext } from '../context/AuthContext';
 import { MapPinPicker, type LatLng } from '../components/MapPinPicker';
 import { cancelBooking, createBooking, getMyBookings } from '../api/scheduling';
@@ -70,6 +71,9 @@ export function ScheduleHome() {
   return (
     <div className={styles.page}>
       <h1 className={styles.title}>Schedule a ride</h1>
+      <p className={styles.rideLink}>
+        Need a ride right now? <Link to="/ride">Request one →</Link>
+      </p>
 
       <div className={styles.card}>
         <h2 className={styles.cardHeading}>New booking</h2>

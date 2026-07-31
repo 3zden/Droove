@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuthContext } from '../context/AuthContext';
 import { MapPinPicker, type LatLng } from '../components/MapPinPicker';
 import { cancelTrip, createTrip, getTrip } from '../api/trips';
@@ -25,6 +26,32 @@ const STATUS_COPY: Record<Trip['status'], { text: string; sub: string }> = {
 
 const ACTIVE_STATUSES: Trip['status'][] = ['REQUESTED', 'MATCHED', 'DRIVER_ARRIVED', 'IN_PROGRESS'];
 const CANCELLABLE_STATUSES: Trip['status'][] = ['REQUESTED', 'MATCHED', 'DRIVER_ARRIVED'];
+
+const STEPS: { status: Trip['status']; label: string }[] = [
+  { status: 'REQUESTED', label: 'Requested' },
+  { status: 'MATCHED', label: 'Matched' },
+  { status: 'DRIVER_ARRIVED', label: 'Arrived' },
+  { status: 'IN_PROGRESS', label: 'In progress' },
+  { status: 'COMPLETED', label: 'Completed' },
+];
+
+function TripStepper({ status }: { status: Trip['status'] }) {
+  const activeIndex = STEPS.findIndex((step) => step.status === status);
+  return (
+    <div className={styles.stepper}>
+      {STEPS.map((step, i) => (
+        <div
+          key={step.status}
+          className={styles.step}
+          data-state={i < activeIndex ? 'done' : i === activeIndex ? 'active' : 'pending'}
+        >
+          <span className={styles.stepDot} />
+          <span className={styles.stepLabel}>{step.label}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export function RideHome() {
   const { session } = useAuthContext();
@@ -126,9 +153,19 @@ export function RideHome() {
     setReceipt(null);
   }
 
+  const isActiveTrip = Boolean(trip) && ACTIVE_STATUSES.includes(trip!.status);
+
   return (
     <div className={styles.page}>
       <h1 className={styles.title}>Request a ride</h1>
+
+      {!trip && (
+        <p className={styles.scheduleLink}>
+          Need this for later? <Link to="/schedule">Schedule a ride →</Link>
+        </p>
+      )}
+
+      {isActiveTrip && <TripStepper status={trip!.status} />}
 
       <div className={styles.card}>
         <MapPinPicker
@@ -170,25 +207,32 @@ export function RideHome() {
         )}
 
         {error && <p className={styles.error}>{error}</p>}
+
+        {isActiveTrip && (
+          <div className={styles.floatingStatus}>
+            <div>
+              <p className={styles.statusText}>{STATUS_COPY[trip!.status].text}</p>
+              <p className={styles.statusSub}>{STATUS_COPY[trip!.status].sub}</p>
+            </div>
+            {CANCELLABLE_STATUSES.includes(trip!.status) && (
+              <button type="button" className={styles.buttonDanger} onClick={handleCancel}>
+                Cancel
+              </button>
+            )}
+          </div>
+        )}
       </div>
 
-      {trip && (
+      {trip && !isActiveTrip && (
         <div className={styles.card}>
           <div className={styles.statusPanel}>
             <div>
               <p className={styles.statusText}>{STATUS_COPY[trip.status].text}</p>
               <p className={styles.statusSub}>{STATUS_COPY[trip.status].sub}</p>
             </div>
-            {CANCELLABLE_STATUSES.includes(trip.status) && (
-              <button type="button" className={styles.buttonDanger} onClick={handleCancel}>
-                Cancel
-              </button>
-            )}
-            {(trip.status === 'COMPLETED' || trip.status === 'CANCELLED' || trip.status === 'NO_DRIVERS_FOUND') && (
-              <button type="button" className={styles.button} onClick={handleNewRide}>
-                New ride →
-              </button>
-            )}
+            <button type="button" className={styles.button} onClick={handleNewRide}>
+              New ride →
+            </button>
           </div>
 
           {trip.status === 'COMPLETED' && (
