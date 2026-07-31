@@ -49,9 +49,24 @@ public class TripController {
         return tripService.getTrip(tripId);
     }
 
+    //  rider arrived (rider is sus ngl.)
+    @PostMapping("api/trips/{tripId}/arrived")
+    public ResponseEntity<TripResponse> arrivedDriver(@PathVariable UUID tripId){
+        return tripService.arrivedDriver(tripId);
+    }
+
     //  Start the Trip
     @PostMapping("api/trips/{tripId}/start")
     public ResponseEntity<TripResponse> startTrip(@PathVariable UUID tripId) {
         return tripService.startTrip(tripId);
     }
+
+    //  the ride is complete
+    @PostMapping("api/trips/{tripId}/complete")
+    public ResponseEntity<TripResponse> completeTrip(@PathVariable UUID tripId){
+        return tripService.completeTrip(tripId);
+    }
+
+
+
 }

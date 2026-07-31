@@ -19,18 +19,22 @@ public class Trip {
     private UUID tripId;
     private UUID userId;
     private UUID driverId;
-    private Long fare;
-    private double[] pickUp;
-    private double[] destination;
+    private long fare;
+    private float pickUpLat;
+    private float pickUpLon;
+    private float destinationLat;
+    private float destinationLon;
     private Date requestedAt;
     private Date startedAt;
     private Date completedAt;
     private TripStatus tripStatus;
 
-    public Trip(double[] pickUp, double[] destination){
+    public Trip(UUID userId, float pickUpLat, float pickUpLon, float destinationLat, float destinationLon){
         this.tripStatus = TripStatus.REQUESTED;
-        this.pickUp = pickUp;
-        this.destination = destination;
+        this.pickUpLat = pickUpLat;
+        this.destinationLat = destinationLat;
+        this.pickUpLon = pickUpLon;
+        this.destinationLon = destinationLon;
         this.requestedAt = new Date();
         this.fare = 0L;
     }

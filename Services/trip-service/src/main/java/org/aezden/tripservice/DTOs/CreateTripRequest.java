@@ -1,6 +1,8 @@
 package org.aezden.tripservice.DTOs;
 
+import java.util.UUID;
+
 public record CreateTripRequest(
-        double[] pickUp, double[] destination
+        UUID userId, float pickUpLat, float pickUpLon, float destinationLat, float destinationLon
 ) {
 }

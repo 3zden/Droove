@@ -21,18 +21,22 @@ import java.util.UUID;
 public class TripService {
     private TripRepo tripRepo;
     private TripMapper tripMapper;
+    private TransitionService transitionService;
 
-    public TripService(TripRepo tripRepo, TripMapper tripMapper){
+    public TripService(TripRepo tripRepo, TripMapper tripMapper, TransitionService transitionService){
         this.tripMapper = tripMapper;
         this.tripRepo = tripRepo;
+        this.transitionService = transitionService;
     }
 
     public TripResponse requestTrip(CreateTripRequest createTripRequest){
-        Trip TempTrip = tripRepo.save(new Trip(createTripRequest.pickUp(), createTripRequest.destination()));
+        Trip TempTrip = tripRepo.save(new Trip(createTripRequest.userId(), createTripRequest.pickUpLat(), createTripRequest.pickUpLon(), createTripRequest.destinationLat(),createTripRequest.destinationLon()));
         return new TripResponse(
                 TempTrip.getTripId(),
-                Arrays.toString(TempTrip.getDestination()),
-                Arrays.toString(TempTrip.getPickUp()),
+                TempTrip.getDestinationLat(),
+                TempTrip.getDestinationLon(),
+                TempTrip.getPickUpLat(),
+                TempTrip.getPickUpLon(),
                 TempTrip.getDriverId(),
                 TempTrip.getFare(),
                 TempTrip.getTripStatus());
@@ -43,10 +47,6 @@ public class TripService {
                 .requestToResponseMapper(tripRepo.findTripByTripId(tripId)));
     }
 
-    public ResponseEntity<TripResponse> cancelTrip(UUID tripId){
-        System.out.println("trip with id :" + tripId +" is Canceled.");
-        return ResponseEntity.status(HttpStatus.GONE).body(tripRepo.removeTripByTripId(tripId));
-    }
 
     public ResponseEntity<List<TripResponse>> getAllTrips(UUID userId){
         List<Trip> temp = tripRepo.getAllByUserId(userId);
@@ -57,10 +57,49 @@ public class TripService {
 
 
     public ResponseEntity<TripResponse> startTrip(UUID tripId) {
-        Date startDate = new Date();
-        Trip trip = tripRepo.findTripByTripId(tripId);
-        trip.setStartedAt(startDate);
-        trip.setTripStatus(TripStatus.ONGOING);
-        return ResponseEntity.status(HttpStatus.CREATED).body(tripMapper.requestToResponseMapper(trip));
+        Trip tempTrip = tripRepo.findTripByTripId(tripId);
+        if (!transitionService.isValid(tempTrip.getTripStatus(), TripStatus.ONGOING)){
+            System.out.println("You cant Start this "+ tempTrip.getTripStatus() + " Trip");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(tripMapper.requestToResponseMapper(tempTrip));
+        }
+        tempTrip.setStartedAt(new Date());
+        tempTrip.setTripStatus(TripStatus.ONGOING);
+        tripRepo.save(tempTrip);
+        return ResponseEntity.status(HttpStatus.CREATED).body(tripMapper.requestToResponseMapper(tempTrip));
+    }
+
+    public ResponseEntity<TripResponse> completeTrip(UUID tripId) {
+        Trip tempTrip = tripRepo.findTripByTripId(tripId);
+        if (!transitionService.isValid(tempTrip.getTripStatus(), TripStatus.COMPLETED)){
+            System.out.println("You cant Complete this "+ tempTrip.getTripStatus() + " Trip");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(tripMapper.requestToResponseMapper(tempTrip));
+        }
+        tempTrip.setTripStatus(TripStatus.COMPLETED);
+        tripRepo.save(tempTrip);
+        return ResponseEntity.status(HttpStatus.CREATED).body(tripMapper.requestToResponseMapper(tempTrip));
+    }
+
+    public ResponseEntity<TripResponse> arrivedDriver(UUID tripId) {
+        Trip tempTrip = tripRepo.findTripByTripId(tripId);
+//      Checking if this transition is valid
+        if (!transitionService.isValid(tempTrip.getTripStatus(), TripStatus.DRIVER_ARRIVED)){
+            System.out.println("You cant change this "+ tempTrip.getTripStatus() + " Trip to driver arrived");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(tripMapper.requestToResponseMapper(tempTrip));
+        }
+        tempTrip.setTripStatus(TripStatus.DRIVER_ARRIVED);
+        tripRepo.save(tempTrip);
+        return ResponseEntity.status(HttpStatus.CREATED).body(tripMapper.requestToResponseMapper(tempTrip));
+    }
+
+    public ResponseEntity<TripResponse> cancelTrip(UUID tripId){
+        Trip tempTrip = tripRepo.findTripByTripId(tripId);
+//      Checking if this transition is valid
+        if (!transitionService.isValid(tempTrip.getTripStatus(), TripStatus.CANCELLED)){
+            System.out.println("You cant cancel this "+ tempTrip.getTripStatus() + " Trip");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(tripMapper.requestToResponseMapper(tempTrip));
+        }
+        tempTrip.setTripStatus(TripStatus.CANCELLED);
+        tripRepo.save(tempTrip);
+        return ResponseEntity.status(HttpStatus.OK).body(tripMapper.requestToResponseMapper(tempTrip));
     }
 }
