@@ -1,7 +1,15 @@
 .page {
+  position: relative;
   min-height: 100dvh;
   display: grid;
   grid-template-columns: 1fr;
+}
+
+.themeToggleWrap {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 5;
 }
 
 @media (min-width: 900px) {
@@ -239,9 +247,9 @@
 }
 
 .roleInput:checked + .roleLabel {
-  background: var(--accent-bg);
-  border-color: var(--accent);
-  color: var(--accent-strong);
+  background: var(--pill-fill);
+  border-color: var(--pill-fill);
+  color: var(--pill-text);
 }
 
 .roleInput:focus-visible + .roleLabel {

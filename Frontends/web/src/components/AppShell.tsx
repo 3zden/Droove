@@ -1,5 +1,6 @@
 import { NavLink, Outlet } from 'react-router-dom';
 import { useAuthContext } from '../context/AuthContext';
+import { ThemeToggle } from './ThemeToggle';
 import styles from './AppShell.module.css';
 
 const RIDER_LINKS = [
@@ -39,6 +40,7 @@ export function AppShell() {
         </div>
         <div className={styles.navRight}>
           {session && <span className={styles.userName}>{session.user.firstName}</span>}
+          <ThemeToggle />
           <button type="button" className={styles.logout} onClick={logout}>
             Log out
           </button>
