@@ -12,9 +12,13 @@ import java.util.Set;
 public class TransitionService {
     Map<TripStatus, Set<TripStatus>> transitionMap = Map.of(
             TripStatus.REQUESTED, Set.of(
-                    TripStatus.MATCHED,
+                    TripStatus.MATCHING,
                     TripStatus.CANCELLED,
                     TripStatus.NO_DRIVER),
+            TripStatus.MATCHING, Set.of(
+                    TripStatus.CANCELLED,
+                    TripStatus.MATCHED
+            ),
             TripStatus.MATCHED, Set.of(
                     TripStatus.CANCELLED,
                     TripStatus.DRIVER_ARRIVED
@@ -28,10 +32,11 @@ public class TransitionService {
                     TripStatus.CANCELLED
             ),
             TripStatus.NO_DRIVER, Set.of(
-                    TripStatus.CANCELLED
+                    TripStatus.CANCELLED,
+                    TripStatus.MATCHING
             )
     );
     public boolean isValid(TripStatus status, TripStatus currentStatus){
-        return transitionMap.containsKey(status) && transitionMap.get(status).contains(currentStatus);
+        return transitionMap.containsKey(currentStatus) && transitionMap.get(currentStatus).contains(status);
     }
 }

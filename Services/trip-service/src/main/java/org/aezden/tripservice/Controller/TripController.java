@@ -3,10 +3,12 @@ package org.aezden.tripservice.Controller;
 
 import org.aezden.tripservice.DTOs.CreateTripRequest;
 import org.aezden.tripservice.DTOs.TripResponse;
-import org.aezden.tripservice.Entities.Trip;
+import org.aezden.tripservice.Exceptions.TripNotFoundException;
 import org.aezden.tripservice.Services.TripService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 
 import java.util.List;
 import java.util.UUID;
@@ -65,6 +67,12 @@ public class TripController {
     @PostMapping("api/trips/{tripId}/complete")
     public ResponseEntity<TripResponse> completeTrip(@PathVariable UUID tripId){
         return tripService.completeTrip(tripId);
+    }
+
+    //  Trip not found exception handling method
+    @ExceptionHandler(TripNotFoundException.class)
+    public ResponseEntity<String> handleNotFound(TripNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 
 
