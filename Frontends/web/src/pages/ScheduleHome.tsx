@@ -70,7 +70,9 @@ export function ScheduleHome() {
 
   return (
     <div className={styles.page}>
-      <h1 className={styles.title}>Schedule a ride</h1>
+      <h1 className={styles.title}>
+        Schedule a ride, <span className={styles.titleMuted}>plan ahead</span>
+      </h1>
       <p className={styles.rideLink}>
         Need a ride right now? <Link to="/ride">Request one →</Link>
       </p>

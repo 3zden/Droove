@@ -86,14 +86,24 @@ export function AuthPage({ loading, error, onLogin, onRegister }: AuthPageProps)
 
       <section className={styles.brandPanel}>
         <span className={styles.brandMark}>DROOVE</span>
-        <h1 className={styles.brandHeadline}>Move the city with you.</h1>
+        <h1 className={styles.brandHeadline}>
+          Move the city <span className={styles.brandHeadlineMuted}>with you.</span>
+        </h1>
         <p className={styles.brandBody}>Riders get a quote in seconds. Drivers pick up in minutes.</p>
+        <div className={styles.brandStats}>
+          <span className={styles.stat}>
+            <span className={styles.statValue}>Live</span>
+            <span className={styles.statLabel}>driver tracking</span>
+          </span>
+          <span className={styles.stat}>
+            <span className={styles.statValue}>Upfront</span>
+            <span className={styles.statLabel}>pricing</span>
+          </span>
+        </div>
       </section>
 
       <section className={styles.formPanel}>
         <div className={styles.card}>
-          <span className={styles.mobileBrand}>DROOVE</span>
-
           <div className={styles.tabs} role="tablist" aria-label="Auth mode">
             <button
               type="button"

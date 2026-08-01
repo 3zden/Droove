@@ -125,7 +125,9 @@ export function DriveHome() {
 
   return (
     <div className={styles.page}>
-      <h1 className={styles.title}>Drive</h1>
+      <h1 className={styles.title}>
+        Drive, <span className={styles.titleMuted}>earn on your schedule</span>
+      </h1>
 
       <div className={styles.card}>
         <div className={styles.toggleRow}>

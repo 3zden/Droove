@@ -1,7 +1,7 @@
 .wrap {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .modeToggle {
@@ -15,14 +15,15 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
+  min-height: var(--tap);
   border: 1px solid var(--border);
   background: var(--surface-raised);
-  color: var(--text-muted);
-  font-size: 13px;
-  font-weight: 600;
+  color: var(--text-body);
+  font-size: 14px;
+  font-weight: 500;
   letter-spacing: -0.01em;
   padding: 10px 14px;
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-chip);
   cursor: pointer;
   transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
 }
@@ -33,9 +34,10 @@
   height: 8px;
   flex-shrink: 0;
   background: currentColor;
-  opacity: 0.45;
+  opacity: 0.4;
 }
 
+/* pickup reads as a dot, drop-off as a square - mirrors the map markers */
 .modeButton:nth-child(1)::before {
   border-radius: 50%;
 }
@@ -45,9 +47,10 @@
 }
 
 .modeButtonActivePickup {
-  border-color: var(--accent);
-  color: var(--accent-strong);
-  background: var(--accent-bg);
+  border-color: var(--text);
+  color: var(--text);
+  background: var(--surface);
+  font-weight: 600;
 }
 
 .modeButtonActivePickup::before {
@@ -58,6 +61,7 @@
   border-color: var(--danger);
   color: var(--danger);
   background: var(--danger-bg);
+  font-weight: 600;
 }
 
 .modeButtonActiveDrop::before {
@@ -65,17 +69,19 @@
 }
 
 .mapContainer {
+  /* isolate keeps Leaflet's internal panes (z-index up to 700) from escaping
+     into the page stacking context and painting over app chrome */
   position: relative;
   isolation: isolate;
-  height: 320px;
+  height: clamp(260px, 42vh, 400px);
   width: 100%;
-  border-radius: var(--radius-input);
+  border-radius: var(--radius-chip);
   overflow: hidden;
   border: 1px solid var(--border);
 }
 
 .hint {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--text-muted);
   margin: 0;
 }

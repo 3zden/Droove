@@ -157,7 +157,9 @@ export function RideHome() {
 
   return (
     <div className={styles.page}>
-      <h1 className={styles.title}>Request a ride</h1>
+      <h1 className={styles.title}>
+        Request a ride, <span className={styles.titleMuted}>move in minutes</span>
+      </h1>
 
       {!trip && (
         <p className={styles.scheduleLink}>
