@@ -5,9 +5,13 @@ import org.aezden.tripservice.Entities.Trip;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.UUID;
 
 @Repository
 public interface TripRepo extends JpaRepository<Trip, UUID>{
-    TripResponse findTripByTripId(UUID tripId);
+    Trip findTripByTripId(UUID tripId);
+    List<Trip> getAllByUserId(UUID userId);
+
+    TripResponse removeTripByTripId(UUID tripId);
 }

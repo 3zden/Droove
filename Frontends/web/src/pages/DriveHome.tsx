@@ -130,7 +130,10 @@ export function DriveHome() {
       <div className={styles.card}>
         <div className={styles.toggleRow}>
           <div>
-            <p className={styles.toggleLabel}>{online ? 'Online' : 'Offline'}</p>
+            <p className={styles.toggleLabel}>
+              {online && <span className="live-dot" aria-hidden="true" />}
+              {online ? 'Online' : 'Offline'}
+            </p>
             <p className={styles.toggleSub}>
               {online ? 'Streaming your position, waiting for offers.' : 'Go online to start receiving ride offers.'}
               {simMode ? ' (simulated route)' : ''}

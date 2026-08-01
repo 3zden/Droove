@@ -11,16 +11,37 @@
 
 .modeButton {
   flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   border: 1px solid var(--border);
   background: var(--surface-raised);
   color: var(--text-muted);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  padding: 8px 12px;
+  letter-spacing: -0.01em;
+  padding: 10px 14px;
   border-radius: var(--radius-pill);
   cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+
+.modeButton::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  flex-shrink: 0;
+  background: currentColor;
+  opacity: 0.45;
+}
+
+.modeButton:nth-child(1)::before {
+  border-radius: 50%;
+}
+
+.modeButton:nth-child(2)::before {
+  border-radius: 2px;
 }
 
 .modeButtonActivePickup {
@@ -29,13 +50,23 @@
   background: var(--accent-bg);
 }
 
+.modeButtonActivePickup::before {
+  opacity: 1;
+}
+
 .modeButtonActiveDrop {
   border-color: var(--danger);
   color: var(--danger);
   background: var(--danger-bg);
 }
 
+.modeButtonActiveDrop::before {
+  opacity: 1;
+}
+
 .mapContainer {
+  position: relative;
+  isolation: isolate;
   height: 320px;
   width: 100%;
   border-radius: var(--radius-input);

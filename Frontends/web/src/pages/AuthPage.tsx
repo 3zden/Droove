@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react';
+import { ThemeToggle } from '../components/ThemeToggle';
 import styles from './AuthPage.module.css';
 import type { LoginRequest, RegisterRequest, Role } from '../types/auth';
 
@@ -79,6 +80,10 @@ export function AuthPage({ loading, error, onLogin, onRegister }: AuthPageProps)
 
   return (
     <div className={styles.page}>
+      <div className={styles.themeToggleWrap}>
+        <ThemeToggle />
+      </div>
+
       <section className={styles.brandPanel}>
         <span className={styles.brandMark}>DROOVE</span>
         <h1 className={styles.brandHeadline}>Move the city with you.</h1>

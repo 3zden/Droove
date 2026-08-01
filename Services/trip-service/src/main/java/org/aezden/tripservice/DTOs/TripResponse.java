@@ -5,6 +5,6 @@ import org.aezden.tripservice.Entities.TripStatus;
 import java.util.UUID;
 
 public record TripResponse(
-        UUID tripId, String destination, String pickUp, UUID driverId, double fare, TripStatus tripStatus
+        UUID tripId, float destinationLat, float destinationLon, float pickUpLat,float pickUpLon, UUID driverId, double fare, TripStatus tripStatus
 ) {
 }
