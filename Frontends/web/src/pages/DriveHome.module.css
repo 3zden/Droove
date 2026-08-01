@@ -1,19 +1,25 @@
 .page {
-  max-width: 720px;
+  max-width: 760px;
   margin: 0 auto;
-  padding: 32px 24px 64px;
+  padding: 28px 16px 48px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 20px;
   width: 100%;
 }
 
 .title {
-  font-size: 26px;
+  font-size: var(--display);
+  line-height: var(--display-lh);
+  letter-spacing: var(--display-ls);
   font-weight: 600;
-  letter-spacing: -0.01em;
   color: var(--text);
   margin: 0;
+  text-wrap: balance;
+}
+
+.titleMuted {
+  color: var(--text-muted);
 }
 
 .card {
@@ -21,7 +27,7 @@
   border: 1px solid var(--border);
   border-radius: var(--radius-card);
   box-shadow: var(--shadow);
-  padding: 28px;
+  padding: 18px;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -31,19 +37,22 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 16px;
 }
 
 .toggleLabel {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 600;
+  letter-spacing: -0.02em;
   color: var(--text);
+  margin: 0;
 }
 
 .toggleSub {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-muted);
   margin: 2px 0 0;
 }
@@ -51,48 +60,54 @@
 .switch {
   position: relative;
   width: 52px;
-  height: 30px;
+  height: 32px;
   border-radius: var(--radius-pill);
   border: 1px solid var(--border);
   background: var(--surface-raised);
   cursor: pointer;
   flex-shrink: 0;
+  transition: background 0.2s ease, border-color 0.2s ease;
 }
 
 .switchOn {
-  background: var(--accent);
-  border-color: var(--accent);
+  background: var(--text);
+  border-color: var(--text);
 }
 
 .switchKnob {
   position: absolute;
   top: 3px;
   left: 3px;
-  width: 22px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
-  background: #fff;
+  background: var(--surface);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
   transition: transform 0.2s ease;
 }
 
 .switchOn .switchKnob {
-  transform: translateX(22px);
+  transform: translateX(20px);
 }
 
 .mapContainer {
+  /* isolate keeps Leaflet's panes from escaping into the page stacking context */
   position: relative;
   isolation: isolate;
-  height: 280px;
+  height: clamp(240px, 38vh, 360px);
   width: 100%;
-  border-radius: var(--radius-input);
+  border-radius: var(--radius-chip);
   overflow: hidden;
   border: 1px solid var(--border);
 }
 
 .button {
   position: relative;
-  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   align-self: flex-start;
+  min-height: var(--tap);
   border: none;
   border-radius: var(--radius-pill);
   padding: var(--btn-padding);
@@ -104,105 +119,156 @@
   color: var(--pill-text);
   box-shadow: var(--pill-shadow);
   cursor: pointer;
+  transition: box-shadow 0.2s ease, transform 0.1s ease;
 }
 
-.button::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--pill-hover-gradient);
-  mix-blend-mode: luminosity;
-  opacity: 0;
-  transition: 0.3s opacity ease-in-out, 0.3s background;
+.button:hover:not(:disabled) {
+  box-shadow: var(--pill-shadow-hover);
 }
 
-.button:hover:not(:disabled)::before {
-  opacity: var(--pill-hover-intensity);
-  transition: 0.7s opacity ease-in-out, 0.7s background;
+.button:active:not(:disabled) {
+  transform: translateY(1px);
 }
 
 .button:disabled {
-  opacity: 0.6;
+  opacity: 0.45;
   cursor: not-allowed;
 }
 
 .buttonRow {
   display: flex;
-  gap: 12px;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .buttonSecondary {
-  composes: button;
-  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--tap);
   border: 1px solid var(--border);
+  background: var(--surface);
   color: var(--text);
-  box-shadow: none;
+  font-size: var(--btn-font-size);
+  font-weight: var(--btn-font-weight);
+  letter-spacing: var(--btn-letter-spacing);
+  padding: var(--btn-padding);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.buttonSecondary:hover {
+  background: var(--surface-raised);
+  border-color: var(--text-muted);
 }
 
 .statusText {
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 600;
+  letter-spacing: -0.02em;
   color: var(--text);
+  margin: 0;
 }
 
 .error {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--danger);
   background: var(--danger-bg);
-  border-radius: var(--radius-input);
-  padding: 10px 12px;
+  border-radius: var(--radius-chip);
+  padding: 12px 14px;
   margin: 0;
 }
+
+/* Offer overlay ----------------------------------------------------------- */
 
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(9, 9, 11, 0.45);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
-  padding: 24px;
-  z-index: 20;
+  padding: 16px;
+  z-index: 60;
 }
 
 .offerCard {
   width: 100%;
-  max-width: 360px;
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
+  max-width: 380px;
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: var(--radius-card);
   box-shadow: var(--shadow);
-  padding: 28px;
+  padding: 24px;
   text-align: center;
+  animation: offer-in 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes offer-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .offerCountdown {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-size: 13px;
-  color: var(--accent);
-  font-weight: 600;
+  color: var(--text-body);
+  font-weight: 500;
   letter-spacing: -0.01em;
-  margin: 0 0 8px;
+  background: var(--surface-raised);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-chip);
+  padding: 5px 12px;
+  margin: 0 0 14px;
 }
 
 .offerFare {
-  font-size: 34px;
+  font-size: clamp(2.25rem, 10vw, 3rem);
   font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
   color: var(--text);
   margin: 0 0 4px;
 }
 
 .offerSub {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-muted);
   margin: 0 0 20px;
 }
 
 .offerButtons {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   justify-content: center;
+}
+
+.offerButtons > * {
+  flex: 1;
+}
+
+@media (min-width: 768px) {
+  .page {
+    padding: 48px 28px 72px;
+    gap: 24px;
+  }
+
+  .card {
+    padding: 28px;
+  }
+
+  .overlay {
+    align-items: center;
+  }
 }

@@ -1,17 +1,18 @@
 .page {
-  max-width: 720px;
+  max-width: 760px;
   margin: 0 auto;
-  padding: 32px 24px 64px;
+  padding: 28px 16px 48px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 20px;
   width: 100%;
 }
 
 .title {
-  font-size: 26px;
+  font-size: var(--display);
+  line-height: var(--display-lh);
+  letter-spacing: var(--display-ls);
   font-weight: 600;
-  letter-spacing: -0.01em;
   color: var(--text);
   margin: 0;
 }
@@ -21,34 +22,39 @@
   border: 1px solid var(--border);
   border-radius: var(--radius-card);
   box-shadow: var(--shadow);
-  padding: 28px;
+  padding: 18px;
 }
 
+/* Balance hero - the one number that matters, at display scale */
 .balanceLabel {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-muted);
-  margin: 0 0 8px;
+  margin: 0 0 6px;
 }
 
 .balanceValue {
-  font-size: 40px;
+  font-size: clamp(2.25rem, 9vw, 3.25rem);
   font-weight: 600;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
   color: var(--text);
   margin: 0;
 }
 
 .cardHeading {
-  font-size: 16px;
+  font-size: var(--heading);
   font-weight: 600;
+  letter-spacing: -0.02em;
   color: var(--text);
   margin: 0 0 16px;
 }
 
+/* Stacks on phones; the old flex row squeezed the input to ~110px. */
 .form {
   display: flex;
+  flex-direction: column;
   gap: 12px;
-  align-items: flex-end;
+  align-items: stretch;
 }
 
 .field {
@@ -56,32 +62,43 @@
   flex-direction: column;
   gap: 6px;
   flex: 1;
+  min-width: 0;
 }
 
 .label {
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 500;
   color: var(--text);
 }
 
 .input {
   width: 100%;
+  min-height: var(--tap);
   border: 1px solid var(--border);
   border-radius: var(--radius-input);
-  padding: 10px 12px;
+  padding: 12px 14px;
   font-size: 15px;
   background: var(--surface-raised);
   color: var(--text);
+  transition: border-color 0.15s ease;
+}
+
+.input:hover {
+  border-color: var(--text-muted);
 }
 
 .input:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 1px;
+  outline: none;
+  border-color: var(--text);
+  box-shadow: 0 0 0 3px var(--surface-raised);
 }
 
 .button {
   position: relative;
-  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--tap);
   border: none;
   border-radius: var(--radius-pill);
   padding: var(--btn-padding);
@@ -94,25 +111,19 @@
   box-shadow: var(--pill-shadow);
   cursor: pointer;
   white-space: nowrap;
+  transition: box-shadow 0.2s ease, transform 0.1s ease;
 }
 
-.button::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--pill-hover-gradient);
-  mix-blend-mode: luminosity;
-  opacity: 0;
-  transition: 0.3s opacity ease-in-out, 0.3s background;
+.button:hover:not(:disabled) {
+  box-shadow: var(--pill-shadow-hover);
 }
 
-.button:hover:not(:disabled)::before {
-  opacity: var(--pill-hover-intensity);
-  transition: 0.7s opacity ease-in-out, 0.7s background;
+.button:active:not(:disabled) {
+  transform: translateY(1px);
 }
 
 .button:disabled {
-  opacity: 0.6;
+  opacity: 0.45;
   cursor: not-allowed;
 }
 
@@ -128,39 +139,67 @@
 .ledgerRow {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: 12px;
-  padding: 12px 14px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-input);
-  font-size: 14px;
+  padding: 14px;
+  background: var(--surface-raised);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-chip);
+  font-size: 15px;
 }
 
 .ledgerType {
   color: var(--text);
   font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 .ledgerDate {
   color: var(--text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .ledgerAmount {
   font-weight: 600;
   color: var(--text);
+  letter-spacing: -0.02em;
+  white-space: nowrap;
 }
 
 .empty {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-muted);
   margin: 12px 0 0;
 }
 
 .error {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--danger);
   background: var(--danger-bg);
-  border-radius: var(--radius-input);
-  padding: 10px 12px;
+  border-radius: var(--radius-chip);
+  padding: 12px 14px;
   margin: 12px 0 0;
+}
+
+@media (min-width: 640px) {
+  /* input + button share a row once there's width for both */
+  .form {
+    flex-direction: row;
+    align-items: flex-end;
+  }
+
+  .button {
+    align-self: flex-end;
+  }
+}
+
+@media (min-width: 768px) {
+  .page {
+    padding: 48px 28px 72px;
+    gap: 24px;
+  }
+
+  .card {
+    padding: 28px;
+  }
 }

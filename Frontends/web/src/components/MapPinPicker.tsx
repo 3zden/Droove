@@ -89,7 +89,7 @@ export function MapPinPicker({
             <CircleMarker
               center={[driverPosition.lat, driverPosition.lng]}
               radius={8}
-              pathOptions={{ color: '#f5f5f7', fillColor: '#f5f5f7', fillOpacity: 1, weight: 2 }}
+              pathOptions={{ color: '#ffffff', fillColor: '#09090b', fillOpacity: 1, weight: 3 }}
             />
           )}
         </MapContainer>
