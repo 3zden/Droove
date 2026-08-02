@@ -57,10 +57,12 @@
   opacity: 1;
 }
 
+/* Monochrome like the pickup button: the markers carry no colour either, and a
+   red control pointing at a zinc square read as two different things. */
 .modeButtonActiveDrop {
-  border-color: var(--danger);
-  color: var(--danger);
-  background: var(--danger-bg);
+  border-color: var(--text);
+  color: var(--text);
+  background: var(--surface);
   font-weight: 600;
 }
 
@@ -80,8 +82,128 @@
   border: 1px solid var(--border);
 }
 
+/* Map pins ---------------------------------------------------------------- */
+
+/* Leaflet's own .leaflet-div-icon paints a white box with a grey border. We
+   replace className outright so it never lands, but reset here too in case a
+   future option merges it back in. */
+.pin {
+  background: transparent;
+  border: none;
+  filter: drop-shadow(0 2px 4px rgba(9, 9, 11, 0.35));
+}
+
+/* Dark mode inverts the tile pane but not the marker pane, so these follow the
+   theme instead of being fixed zinc - a hardcoded dark mark would disappear
+   against the inverted map. */
+.pinRing {
+  fill: var(--surface);
+  stroke: var(--text);
+  stroke-width: 4;
+}
+
+.pinSquare {
+  fill: var(--text);
+  stroke: var(--surface);
+  stroke-width: 2.5;
+}
+
+/* Animate the svg, never the wrapper - Leaflet owns the wrapper's transform
+   for positioning, and touching it makes the marker drift off its coordinate. */
+.pin svg {
+  display: block;
+  animation: pinIn 0.2s cubic-bezier(0.2, 0.9, 0.3, 1.25);
+}
+
+@keyframes pinIn {
+  from {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pin svg {
+    animation: none;
+  }
+}
+
 .hint {
   font-size: 13px;
   color: var(--text-muted);
   margin: 0;
+}
+
+/* ---- route overlay ------------------------------------------------------
+   Leaflet sets `stroke` as an SVG presentation attribute, and presentation
+   attributes lose to any CSS rule - so the themed colour is set here and wins
+   without needing !important. */
+
+.routeGlow,
+.routeCore {
+  stroke: var(--accent);
+  fill: none;
+}
+
+/* the halo: wide, blurred, breathing */
+.routeGlow {
+  filter: blur(6px);
+  animation: routePulse 2.6s ease-in-out infinite;
+}
+
+/* the path itself, with light travelling along it */
+.routeCore {
+  filter: drop-shadow(0 0 5px var(--accent));
+  stroke-dasharray: 16 12;
+  animation: routeFlow 1.2s linear infinite;
+}
+
+@keyframes routePulse {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes routeFlow {
+  to {
+    stroke-dashoffset: -28;
+  }
+}
+
+/* A straight-line estimate must not look like a surveyed road: muted, static,
+   openly provisional. Same principle as the `source` field on the API - a
+   degraded answer should never be indistinguishable from a good one. */
+.routeGlowFallback,
+.routeCoreFallback {
+  stroke: var(--text-muted);
+  fill: none;
+}
+
+.routeGlowFallback {
+  opacity: 0.16;
+  filter: blur(5px);
+}
+
+.routeCoreFallback {
+  opacity: 0.7;
+  stroke-dasharray: 6 8;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .routeGlow,
+  .routeCore {
+    animation: none;
+  }
+
+  .routeGlow {
+    opacity: 0.5;
+  }
+
+  .routeCore {
+    stroke-dasharray: none;
+  }
 }

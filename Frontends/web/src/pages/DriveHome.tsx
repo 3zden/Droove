@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { CircleMarker, MapContainer, TileLayer } from 'react-leaflet';
 import { useAuthContext } from '../context/AuthContext';
+import { Terrain } from '../components/Terrain';
 import { connectSocket, LOCATION_WS_URL, NOTIFICATION_WS_URL, type SocketHandle } from '../api/socket';
 import { acceptOffer, declineOffer } from '../api/matching';
 import { completeTrip, markArrived, startTrip } from '../api/trips';
@@ -152,7 +153,7 @@ export function DriveHome() {
           </button>
         </div>
 
-        {online && (
+        {online ? (
           <div className={styles.mapContainer}>
             <MapContainer center={[position.lat, position.lng]} zoom={14} style={{ height: '100%', width: '100%' }}>
               <TileLayer
@@ -161,6 +162,10 @@ export function DriveHome() {
               />
               <CircleMarker center={[position.lat, position.lng]} radius={9} pathOptions={{ color: '#4bafbd', fillColor: '#4bafbd', fillOpacity: 0.9 }} />
             </MapContainer>
+          </div>
+        ) : (
+          <div className={styles.restPanel}>
+            <Terrain variant="route" />
           </div>
         )}
 

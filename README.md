@@ -31,6 +31,7 @@ Droove/
 │  ├─ trip-service           trip lifecycle state machine           🚧 in progress
 │  ├─ matching-service       nearest-driver search + offers
 │  ├─ pricing-service        fare formula + surge
+│  ├─ routing-service        road distance/ETA via GraphHopper
 │  ├─ payment-service        double-entry ledger
 │  ├─ scheduling-service     future-booking queue
 │  ├─ location-gateway       GPS ingest (WebSocket)
@@ -57,11 +58,13 @@ This is a guided learning build, in progress — tracked here honestly rather th
 |---|---|
 | `user-service` | ✅ Done — register/login/me, bcrypt, JWT (HS256), tested |
 | `trip-service` | 🚧 Being rewritten against the state-machine contract |
-| `matching-service`, `pricing-service`, `payment-service`, `scheduling-service` | ⬜ Scaffolded (Maven skeleton), not yet implemented |
+| `pricing-service` | ✅ Fare formula, min fare, surge cap — surge still reads a hardcoded 1.0 instead of Redis |
+| `routing-service` | ✅ Road distance/duration/geometry via GraphHopper, with a flagged straight-line fallback |
+| `matching-service`, `payment-service`, `scheduling-service` | ⬜ Scaffolded (Maven skeleton), not yet implemented |
 | `location-gateway`, `notification-service`, `analytics-sink` | ⬜ Not started |
 | `api-gateway` | ⬜ Skeleton only — JWT validation and rate limiting not wired |
-| `Frontends/web` | ✅ All 5 screens built (auth, ride, schedule, wallet, drive) — backend wiring is a deliberate in-progress exercise, not a bug |
-| Docker Compose stack | 🚧 In progress — `Docker/docker-compose.yml` is currently a placeholder |
+| `Frontends/web` | 🚧 Ride screen wired to pricing + routing (live fare and drawn road route); auth, trips, wallet, schedule clients are still exercise stubs |
+| Docker Compose stack | 🚧 `graphhopper` runs; Postgres, Redis and Kafka not added yet |
 
 ## Getting started
 

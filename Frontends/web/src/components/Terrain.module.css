@@ -26,3 +26,9 @@
   mask-image: linear-gradient(to bottom, transparent, #000 58%);
   -webkit-mask-image: linear-gradient(to bottom, transparent, #000 58%);
 }
+
+/* Keyed like the band, so no mask. Biased left of centre because the trail runs
+   up the left third - dead centre crops it off on narrow cards. */
+.route {
+  object-position: 38% center;
+}

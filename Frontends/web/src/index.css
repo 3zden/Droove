@@ -46,6 +46,9 @@
   --danger: #b91c1c;
   --danger-bg: rgba(185, 28, 28, 0.07);
   --shadow: 0 1px 2px rgba(9, 9, 11, 0.04), 0 12px 32px -12px rgba(9, 9, 11, 0.12);
+  /* Tint only: the auth panel casts sideways on desktop and upward when the
+     layout stacks, so the offsets belong to the rule, not the token. */
+  --shadow-edge-tint: rgba(9, 9, 11, 0.16);
 
   /* Primary button: awesomic's 4-layer recipe (inset highlight, inner glow, ring, drop) */
   --pill-fill: #09090b;
@@ -83,6 +86,7 @@
   --danger: #f0796b;
   --danger-bg: rgba(240, 121, 107, 0.1);
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 16px 40px -16px rgba(0, 0, 0, 0.7);
+  --shadow-edge-tint: rgba(0, 0, 0, 0.45);
 
   /* Inverted: light chip on dark ground, same layered depth */
   --pill-fill: #fafafa;

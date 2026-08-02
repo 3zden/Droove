@@ -4,9 +4,11 @@ import { useAuthContext } from '../context/AuthContext';
 import { MapPinPicker, type LatLng } from '../components/MapPinPicker';
 import { cancelTrip, createTrip, getTrip } from '../api/trips';
 import { getQuote } from '../api/pricing';
+import { getRoute } from '../api/routing';
 import { getTripLedger } from '../api/payments';
 import { connectSocket, LOCATION_WS_URL, NOTIFICATION_WS_URL } from '../api/socket';
 import type { Quote } from '../types/pricing';
+import type { Route } from '../types/routing';
 import type { Trip } from '../types/trips';
 import type { LedgerTransaction } from '../types/payments';
 import type { DriverPosition, NotificationMessage } from '../types/realtime';
@@ -58,16 +60,22 @@ export function RideHome() {
   const [pickup, setPickup] = useState<LatLng | null>(null);
   const [dropoff, setDropoff] = useState<LatLng | null>(null);
   const [quote, setQuote] = useState<Quote | null>(null);
+  const [route, setRoute] = useState<Route | null>(null);
   const [trip, setTrip] = useState<Trip | null>(null);
   const [driverPosition, setDriverPosition] = useState<DriverPosition | null>(null);
   const [receipt, setReceipt] = useState<LedgerTransaction[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Live quote whenever both pins are set and there's no trip in flight yet.
+  // Live quote and drawn route the moment both pins are set, before any trip exists.
+  //
+  // Fired independently, not with Promise.all, on purpose: the price is the thing the
+  // rider is waiting for, and routing-service being down must not take it with it. The
+  // map just loses its line.
   useEffect(() => {
     if (!pickup || !dropoff || trip) return;
     let cancelled = false;
+
     getQuote({ pickupLat: pickup.lat, pickupLng: pickup.lng, dropLat: dropoff.lat, dropLng: dropoff.lng })
       .then((q) => {
         if (!cancelled) setQuote(q);
@@ -75,6 +83,15 @@ export function RideHome() {
       .catch((err) => {
         if (!cancelled) setError(err instanceof Error ? err.message : 'Could not get a quote');
       });
+
+    getRoute({ fromLat: pickup.lat, fromLng: pickup.lng, toLat: dropoff.lat, toLng: dropoff.lng })
+      .then((r) => {
+        if (!cancelled) setRoute(r);
+      })
+      .catch(() => {
+        if (!cancelled) setRoute(null);
+      });
+
     return () => {
       cancelled = true;
     };
@@ -147,6 +164,7 @@ export function RideHome() {
   function handleNewRide() {
     setTrip(null);
     setQuote(null);
+    setRoute(null);
     setPickup(null);
     setDropoff(null);
     setDriverPosition(null);
@@ -177,6 +195,7 @@ export function RideHome() {
           onDropoffChange={setDropoff}
           locked={Boolean(trip)}
           driverPosition={driverPosition}
+          route={route}
         />
 
         {quote && !trip && (
@@ -200,6 +219,15 @@ export function RideHome() {
               </div>
             )}
           </div>
+        )}
+
+        {/* The route is drawn either way - this says which kind of line you're looking at. */}
+        {route && !trip && (
+          <p className={styles.routeNote} data-source={route.source}>
+            {route.source === 'ROAD'
+              ? `Optimal road route · ${(route.distanceMeters / 1000).toFixed(1)} km`
+              : 'Estimated route — live road routing is unavailable right now.'}
+          </p>
         )}
 
         {!trip && (

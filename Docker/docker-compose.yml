@@ -1,0 +1,33 @@
+# Only the routing engine so far. Postgres, Redis and Kafka land here as they get wired.
+services:
+  graphhopper:
+    # Pinned, not :latest. The community image builds daily from master, and "latest"
+    # silently changing is not something you want between two fare quotes.
+    image: israelhikingmap/graphhopper:11.0
+    container_name: droove-graphhopper
+    ports:
+      - "8989:8989"
+    volumes:
+      # Holds the .osm.pbf and the built graph cache. Both are large binaries and both
+      # are gitignored - the extract is downloaded, the cache is derived.
+      - ./graphhopper/data:/data
+    environment:
+      # The first run imports the extract and builds the routing graph; that is the
+      # memory-hungry part. Later runs just memory-map the prebuilt cache.
+      JAVA_OPTS: "-Xmx2g -Xms512m"
+    command:
+      - "-i"
+      - "/data/morocco-latest.osm.pbf"
+      - "-o"
+      - "/data/graph-cache"
+      - "--host"
+      - "0.0.0.0"
+    # The image ships a healthcheck on /health. It matters: during the import the
+    # container is up but not answering, and routing-service should wait for healthy
+    # rather than spend that window serving fallback estimates.
+    healthcheck:
+      test: ["CMD-SHELL", "curl --fail http://localhost:8989/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      start_period: 600s
+      retries: 5
