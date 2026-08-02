@@ -383,7 +383,9 @@
      rounded down its leading edge and casting back over the terrain. */
   .formPanel {
     padding: 48px;
-    border-radius: var(--radius-card) 0 0 var(--radius-card);
+    /* bigger than --radius-card: the panel is full height, so only the extreme
+       top and bottom corners are ever visible and a 24px curve got lost */
+    border-radius: 36px 0 0 36px;
     box-shadow: var(--shadow-edge);
   }
 }

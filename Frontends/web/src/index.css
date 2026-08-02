@@ -46,8 +46,9 @@
   --danger: #b91c1c;
   --danger-bg: rgba(185, 28, 28, 0.07);
   --shadow: 0 1px 2px rgba(9, 9, 11, 0.04), 0 12px 32px -12px rgba(9, 9, 11, 0.12);
-  /* cast sideways, for a panel that butts up against another instead of floating */
-  --shadow-edge: -20px 0 44px -26px rgba(9, 9, 11, 0.22);
+  /* cast sideways, for a panel that butts up against another instead of floating.
+     Barely any negative spread - this has to read across a full-height seam. */
+  --shadow-edge: -30px 0 60px -14px rgba(9, 9, 11, 0.16);
 
   /* Primary button: awesomic's 4-layer recipe (inset highlight, inner glow, ring, drop) */
   --pill-fill: #09090b;
@@ -85,7 +86,7 @@
   --danger: #f0796b;
   --danger-bg: rgba(240, 121, 107, 0.1);
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 16px 40px -16px rgba(0, 0, 0, 0.7);
-  --shadow-edge: -20px 0 48px -24px rgba(0, 0, 0, 0.8);
+  --shadow-edge: -30px 0 60px -10px rgba(0, 0, 0, 0.9);
 
   /* Inverted: light chip on dark ground, same layered depth */
   --pill-fill: #fafafa;
