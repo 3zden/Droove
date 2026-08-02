@@ -42,23 +42,13 @@
   max-width: 62%;
 }
 
+/* the leftward fade lives in the Terrain component; this only places the box */
 .balanceTerrain {
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
-  width: 52%;
-  overflow: hidden;
-  pointer-events: none;
-  /* fade the inner edge so the artwork dissolves into the card instead of butting against it */
-  mask-image: linear-gradient(to right, transparent, #000 38%);
-  -webkit-mask-image: linear-gradient(to right, transparent, #000 38%);
-}
-
-/* push in on the right-hand peak - the close-up crop, not the whole landscape */
-.balanceTerrain svg {
-  transform: scale(2.1);
-  transform-origin: 88% 92%;
+  width: 56%;
 }
 
 .refresh {

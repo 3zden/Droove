@@ -194,7 +194,10 @@
   border-radius: var(--radius-chip);
   background: var(--surface-raised);
   overflow: hidden;
-  padding: 22px 18px 96px;
+  /* the band needs real height or the crop lands on the dense foreground and
+     the mist that makes the render read as landscape never shows */
+  --terrain-h: clamp(120px, 17vh, 165px);
+  padding: 24px 18px calc(var(--terrain-h) + 20px);
 }
 
 .emptyTerrain {
@@ -202,7 +205,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  height: 84px;
+  height: var(--terrain-h);
 }
 
 .empty {

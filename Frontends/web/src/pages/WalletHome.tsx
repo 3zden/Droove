@@ -78,9 +78,7 @@ export function WalletHome() {
             Refresh
           </button>
         </div>
-        <div className={styles.balanceTerrain}>
-          <Terrain />
-        </div>
+        <Terrain variant="moss" className={styles.balanceTerrain} />
       </div>
 
       <div className={styles.card}>

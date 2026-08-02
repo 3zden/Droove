@@ -108,7 +108,7 @@ export function ScheduleHome() {
         {bookings.length === 0 && (
           <div className={styles.emptyState}>
             <p className={styles.empty}>No upcoming bookings yet.</p>
-            <Terrain className={styles.emptyTerrain} />
+            <Terrain variant="mist" className={styles.emptyTerrain} />
           </div>
         )}
         {bookings.length > 0 && (
