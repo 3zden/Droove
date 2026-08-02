@@ -358,6 +358,9 @@
 @media (min-width: 900px) {
   .page {
     grid-template-columns: 1.05fr 1fr;
+    /* the form panel's rounded corners cut away to this, so it has to match the
+       brand panel rather than the form panel it sits on */
+    background: var(--surface-raised);
   }
 
   .themeToggleWrap {
@@ -370,14 +373,17 @@
     padding: 64px 64px calc(var(--terrain-h) + 56px);
     gap: 24px;
     border-bottom: none;
-    border-right: 1px solid var(--border-subtle);
   }
 
   .brandHeadline {
     max-width: 12ch;
   }
 
+  /* Replaces the hairline divider: the form panel is its own raised surface,
+     rounded down its leading edge and casting back over the terrain. */
   .formPanel {
     padding: 48px;
+    border-radius: var(--radius-card) 0 0 var(--radius-card);
+    box-shadow: var(--shadow-edge);
   }
 }
