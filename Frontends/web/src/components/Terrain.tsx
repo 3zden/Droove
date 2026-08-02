@@ -1,6 +1,6 @@
 import styles from './Terrain.module.css';
 
-export type TerrainVariant = 'band' | 'moss' | 'mist';
+export type TerrainVariant = 'band' | 'moss' | 'mist' | 'route';
 
 /**
  * Decorative terrain artwork, in awesomic's organic-render language.
@@ -16,6 +16,9 @@ export type TerrainVariant = 'band' | 'moss' | 'mist';
  *          cards where the artwork bleeds off one edge.
  *  - mist  misty hills anchored to the bottom, dissolving upward. For giving a
  *          short empty state a floor.
+ *  - route a trail winding away over the same moorland into fog. Keyed like the
+ *          band, so it carries its own fade. For standing in where a live map
+ *          would otherwise be - the landscape with nobody driving it yet.
  *
  * Dark mode dims through one filter token rather than a second set of files.
  */
@@ -23,6 +26,7 @@ const SOURCES: Record<TerrainVariant, string> = {
   band: '/terrain/hills.webp',
   moss: '/terrain/moss.webp',
   mist: '/terrain/mist.webp',
+  route: '/terrain/route.webp',
 };
 
 export function Terrain({ variant = 'band', className }: { variant?: TerrainVariant; className?: string }) {
@@ -31,8 +35,8 @@ export function Terrain({ variant = 'band', className }: { variant?: TerrainVari
       src={SOURCES[variant]}
       alt=""
       aria-hidden="true"
-      /* the band is hero artwork and sits above the fold; the rest can wait */
-      loading={variant === 'band' ? 'eager' : 'lazy'}
+      /* band and route are hero artwork above the fold; the rest can wait */
+      loading={variant === 'band' || variant === 'route' ? 'eager' : 'lazy'}
       decoding="async"
       className={[styles.img, styles[variant], className].filter(Boolean).join(' ')}
     />

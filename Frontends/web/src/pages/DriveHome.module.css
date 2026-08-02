@@ -90,15 +90,25 @@
   transform: translateX(20px);
 }
 
-.mapContainer {
-  /* isolate keeps Leaflet's panes from escaping into the page stacking context */
+/* One footprint, two occupants: the live map when online, the resting landscape
+   when not. Shared so going online never changes the card's height. */
+.mapContainer,
+.restPanel {
   position: relative;
-  isolation: isolate;
   height: clamp(240px, 38vh, 360px);
   width: 100%;
   border-radius: var(--radius-chip);
   overflow: hidden;
   border: 1px solid var(--border);
+}
+
+.mapContainer {
+  /* isolate keeps Leaflet's panes from escaping into the page stacking context */
+  isolation: isolate;
+}
+
+.restPanel {
+  background: var(--surface-raised);
 }
 
 .button {
