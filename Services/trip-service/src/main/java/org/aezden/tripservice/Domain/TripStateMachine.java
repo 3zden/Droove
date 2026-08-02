@@ -1,4 +1,4 @@
-package org.aezden.tripservice.Services;
+package org.aezden.tripservice.Domain;
 
 
 import org.aezden.tripservice.Entities.TripStatus;
@@ -9,7 +9,7 @@ import java.util.Set;
 
 
 @Component
-public class TransitionService {
+public class TripStateMachine {
     Map<TripStatus, Set<TripStatus>> transitionMap = Map.of(
             TripStatus.REQUESTED, Set.of(
                     TripStatus.MATCHING,
