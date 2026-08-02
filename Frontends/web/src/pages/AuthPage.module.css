@@ -59,7 +59,7 @@
   text-wrap: balance;
 }
 
-/* awesomic's signature: the second clause drops back to zinc-400 */
+
 .brandHeadlineMuted {
   color: var(--text-muted);
 }
@@ -373,6 +373,18 @@
     padding: 64px 64px calc(var(--terrain-h) + 56px);
     gap: 24px;
     border-bottom: none;
+    /* let the band run past the seam - see .brandTerrain below */
+    overflow: visible;
+  }
+
+  /* The form panel's rounded bottom-left corner cuts away to whatever is
+     behind it. Run the band under the panel so that cut reveals terrain
+     instead of a pale notch against the dark foreground. */
+  .brandTerrain {
+    /* .img sets width:100%, and on a replaced element width:auto falls back to
+       the intrinsic size rather than the left/right pair - which would rescale
+       the crop. Widen explicitly instead: 48px clears the 36px corner. */
+    width: calc(100% + 48px);
   }
 
   .brandHeadline {
