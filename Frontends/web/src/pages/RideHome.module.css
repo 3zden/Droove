@@ -149,6 +149,33 @@
   color: var(--text);
 }
 
+.routeNote {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.routeNote::before {
+  content: '';
+  width: 18px;
+  height: 3px;
+  border-radius: 2px;
+  flex-shrink: 0;
+  background: var(--accent);
+}
+
+/* an estimate reads as a dashed, colourless line - matching how it's drawn on the map */
+.routeNote[data-source='FALLBACK']::before {
+  background: repeating-linear-gradient(
+    to right,
+    var(--text-muted) 0 4px,
+    transparent 4px 7px
+  );
+}
+
 /* Buttons ----------------------------------------------------------------- */
 
 .button {
