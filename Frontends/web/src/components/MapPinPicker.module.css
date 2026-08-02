@@ -57,10 +57,12 @@
   opacity: 1;
 }
 
+/* Monochrome like the pickup button: the markers carry no colour either, and a
+   red control pointing at a zinc square read as two different things. */
 .modeButtonActiveDrop {
-  border-color: var(--danger);
-  color: var(--danger);
-  background: var(--danger-bg);
+  border-color: var(--text);
+  color: var(--text);
+  background: var(--surface);
   font-weight: 600;
 }
 
@@ -78,6 +80,52 @@
   border-radius: var(--radius-chip);
   overflow: hidden;
   border: 1px solid var(--border);
+}
+
+/* Map pins ---------------------------------------------------------------- */
+
+/* Leaflet's own .leaflet-div-icon paints a white box with a grey border. We
+   replace className outright so it never lands, but reset here too in case a
+   future option merges it back in. */
+.pin {
+  background: transparent;
+  border: none;
+  filter: drop-shadow(0 2px 4px rgba(9, 9, 11, 0.35));
+}
+
+/* Dark mode inverts the tile pane but not the marker pane, so these follow the
+   theme instead of being fixed zinc - a hardcoded dark mark would disappear
+   against the inverted map. */
+.pinRing {
+  fill: var(--surface);
+  stroke: var(--text);
+  stroke-width: 4;
+}
+
+.pinSquare {
+  fill: var(--text);
+  stroke: var(--surface);
+  stroke-width: 2.5;
+}
+
+/* Animate the svg, never the wrapper - Leaflet owns the wrapper's transform
+   for positioning, and touching it makes the marker drift off its coordinate. */
+.pin svg {
+  display: block;
+  animation: pinIn 0.2s cubic-bezier(0.2, 0.9, 0.3, 1.25);
+}
+
+@keyframes pinIn {
+  from {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pin svg {
+    animation: none;
+  }
 }
 
 .hint {
