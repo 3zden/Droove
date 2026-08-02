@@ -25,7 +25,46 @@
   padding: 18px;
 }
 
-/* Balance hero - the one number that matters, at display scale */
+/* Balance hero - the one number that matters, at display scale, with the
+   terrain bleeding off the right edge the way awesomic frames its feature cards */
+.balanceCard {
+  position: relative;
+  overflow: hidden;
+  min-height: 190px;
+  display: flex;
+  align-items: center;
+}
+
+.balanceMain {
+  position: relative;
+  z-index: 1;
+  /* keep the number clear of the artwork on narrow cards */
+  max-width: 62%;
+}
+
+.balanceTerrain {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 52%;
+  overflow: hidden;
+  pointer-events: none;
+  /* fade the inner edge so the artwork dissolves into the card instead of butting against it */
+  mask-image: linear-gradient(to right, transparent, #000 38%);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 38%);
+}
+
+/* push in on the right-hand peak - the close-up crop, not the whole landscape */
+.balanceTerrain svg {
+  transform: scale(2.1);
+  transform-origin: 88% 92%;
+}
+
+.refresh {
+  margin-top: 18px;
+}
+
 .balanceLabel {
   font-size: 14px;
   color: var(--text-muted);

@@ -187,7 +187,26 @@
   color: var(--text-muted);
 }
 
+/* An empty list was just grey text on white; the terrain gives it a floor to sit on. */
+.emptyState {
+  position: relative;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-chip);
+  background: var(--surface-raised);
+  overflow: hidden;
+  padding: 22px 18px 96px;
+}
+
+.emptyTerrain {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 84px;
+}
+
 .empty {
+  position: relative;
   font-size: 14px;
   color: var(--text-muted);
   margin: 0;

@@ -58,6 +58,13 @@
   --glass-bg: rgba(255, 255, 255, 0.82);
   --glass-border: rgba(9, 9, 11, 0.06);
   --map-filter: grayscale(1) contrast(1.04) brightness(1.02);
+
+  /* Decorative terrain - the one place colour is allowed into the zinc palette */
+  --terrain-back: #e2e9c6;
+  --terrain-mid: #c2d28f;
+  --terrain-front: #9db363;
+  --terrain-shade: #4f6329;
+  --terrain-light: #ffffff;
   color-scheme: light;
 }
 
@@ -91,6 +98,14 @@
   --glass-bg: rgba(9, 9, 11, 0.78);
   --glass-border: rgba(255, 255, 255, 0.08);
   --map-filter: grayscale(1) invert(1) brightness(0.92) contrast(0.88);
+
+  /* Same hills after dusk. Deep enough not to glare against zinc-950, and the depth
+     ramp inverts: at night the distant ridge falls away dark, the near one catches light. */
+  --terrain-back: #333d26;
+  --terrain-mid: #44512f;
+  --terrain-front: #58683a;
+  --terrain-shade: #10150a;
+  --terrain-light: #ffffff;
   color-scheme: dark;
 }
 

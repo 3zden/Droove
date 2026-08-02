@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { useAuthContext } from '../context/AuthContext';
+import { Terrain } from '../components/Terrain';
 import { getTripLedger, getWallet, topUp } from '../api/payments';
 import type { LedgerTransaction } from '../types/payments';
 import styles from './WalletHome.module.css';
@@ -69,12 +70,17 @@ export function WalletHome() {
     <div className={styles.page}>
       <h1 className={styles.title}>Wallet</h1>
 
-      <div className={styles.card}>
-        <p className={styles.balanceLabel}>Balance</p>
-        <p className={styles.balanceValue}>{balanceCents === null ? '—' : formatCents(balanceCents)}</p>
-        <button type="button" className={styles.button} onClick={loadBalance} style={{ marginTop: 16 }}>
-          Refresh
-        </button>
+      <div className={`${styles.card} ${styles.balanceCard}`}>
+        <div className={styles.balanceMain}>
+          <p className={styles.balanceLabel}>Balance</p>
+          <p className={styles.balanceValue}>{balanceCents === null ? '—' : formatCents(balanceCents)}</p>
+          <button type="button" className={`${styles.button} ${styles.refresh}`} onClick={loadBalance}>
+            Refresh
+          </button>
+        </div>
+        <div className={styles.balanceTerrain}>
+          <Terrain />
+        </div>
       </div>
 
       <div className={styles.card}>

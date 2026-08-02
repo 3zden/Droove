@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { ThemeToggle } from '../components/ThemeToggle';
+import { Terrain } from '../components/Terrain';
 import styles from './AuthPage.module.css';
 import type { LoginRequest, RegisterRequest, Role } from '../types/auth';
 
@@ -100,6 +101,7 @@ export function AuthPage({ loading, error, onLogin, onRegister }: AuthPageProps)
             <span className={styles.statLabel}>pricing</span>
           </span>
         </div>
+        <Terrain className={styles.brandTerrain} />
       </section>
 
       <section className={styles.formPanel}>

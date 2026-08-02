@@ -1,0 +1,33 @@
+.svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  /* purely decorative - never eat a tap meant for the content above it */
+  pointer-events: none;
+}
+
+.svg feDiffuseLighting {
+  lighting-color: var(--terrain-light);
+}
+
+/* Each layer picks its base colour, then derives its own shaded foot, so the
+   whole palette stays three tokens instead of six. */
+.g1 {
+  --layer: var(--terrain-back);
+}
+
+.g2 {
+  --layer: var(--terrain-mid);
+}
+
+.g3 {
+  --layer: var(--terrain-front);
+}
+
+.stopTop {
+  stop-color: var(--layer);
+}
+
+.stopBot {
+  stop-color: color-mix(in srgb, var(--layer) 68%, var(--terrain-shade));
+}

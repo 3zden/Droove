@@ -21,10 +21,22 @@
   flex-direction: column;
   justify-content: center;
   gap: 20px;
-  padding: 72px 20px 32px;
+  /* one knob: the band's height, with the padding derived so copy always clears it */
+  --terrain-h: clamp(120px, 20vh, 180px);
+  justify-content: flex-end;
+  padding: 72px 20px calc(var(--terrain-h) + 40px);
   overflow: hidden;
   background: var(--surface-raised);
   border-bottom: 1px solid var(--border-subtle);
+}
+
+.brandTerrain {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--terrain-h);
+  z-index: 0;
 }
 
 .brandMark {
@@ -354,7 +366,8 @@
   }
 
   .brandPanel {
-    padding: 64px;
+    --terrain-h: clamp(200px, 32vh, 330px);
+    padding: 64px 64px calc(var(--terrain-h) + 56px);
     gap: 24px;
     border-bottom: none;
     border-right: 1px solid var(--border-subtle);
