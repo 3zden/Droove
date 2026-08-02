@@ -43,3 +43,9 @@ __pycache__/
 
 # Claude-generated planning/teaching/explainer docs - not project deliverables
 BRIEFING*.md
+
+# OSM extracts and the routing graph built from them. Hundreds of MB, and both are
+# derived artefacts: the extract is downloaded from Geofabrik, the cache is built
+# from it on first run. See Docker/docker-compose.yml.
+*.osm.pbf
+Docker/graphhopper/data/
