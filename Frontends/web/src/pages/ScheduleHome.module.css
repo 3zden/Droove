@@ -187,7 +187,29 @@
   color: var(--text-muted);
 }
 
+/* An empty list was just grey text on white; the terrain gives it a floor to sit on. */
+.emptyState {
+  position: relative;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-chip);
+  background: var(--surface-raised);
+  overflow: hidden;
+  /* the band needs real height or the crop lands on the dense foreground and
+     the mist that makes the render read as landscape never shows */
+  --terrain-h: clamp(120px, 17vh, 165px);
+  padding: 24px 18px calc(var(--terrain-h) + 20px);
+}
+
+.emptyTerrain {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--terrain-h);
+}
+
 .empty {
+  position: relative;
   font-size: 14px;
   color: var(--text-muted);
   margin: 0;

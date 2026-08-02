@@ -2,17 +2,17 @@ package org.aezden.tripservice.Services;
 
 import org.aezden.tripservice.DTOs.CreateTripRequest;
 import org.aezden.tripservice.DTOs.TripResponse;
+import org.aezden.tripservice.Domain.TripStateMachine;
 import org.aezden.tripservice.Entities.Trip;
 import org.aezden.tripservice.Entities.TripStatus;
+import org.aezden.tripservice.Exceptions.TripNotFoundException;
 import org.aezden.tripservice.Repositries.TripRepo;
 import org.aezden.tripservice.TripMapper;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 //import java.util.Time;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -21,12 +21,17 @@ import java.util.UUID;
 public class TripService {
     private TripRepo tripRepo;
     private TripMapper tripMapper;
-    private TransitionService transitionService;
+    private TripStateMachine tripStateMachine;
 
-    public TripService(TripRepo tripRepo, TripMapper tripMapper, TransitionService transitionService){
+    public TripService(TripRepo tripRepo, TripMapper tripMapper, TripStateMachine tripStateMachine){
         this.tripMapper = tripMapper;
         this.tripRepo = tripRepo;
-        this.transitionService = transitionService;
+        this.tripStateMachine = tripStateMachine;
+    }
+
+    public Trip getTripOrThrow(UUID tripId){
+        return tripRepo.findTripByTripId(tripId)
+                .orElseThrow(() -> new TripNotFoundException(tripId));
     }
 
     public TripResponse requestTrip(CreateTripRequest createTripRequest){
@@ -44,7 +49,7 @@ public class TripService {
 
     public ResponseEntity<TripResponse> getTrip(UUID tripId) {
         return ResponseEntity.status(HttpStatus.OK).body(tripMapper
-                .requestToResponseMapper(tripRepo.findTripByTripId(tripId)));
+                .requestToResponseMapper(getTripOrThrow(tripId)));
     }
 
 
@@ -57,8 +62,8 @@ public class TripService {
 
 
     public ResponseEntity<TripResponse> startTrip(UUID tripId) {
-        Trip tempTrip = tripRepo.findTripByTripId(tripId);
-        if (!transitionService.isValid(tempTrip.getTripStatus(), TripStatus.ONGOING)){
+        Trip tempTrip = getTripOrThrow(tripId);
+        if (!tripStateMachine.isValid(TripStatus.ONGOING, tempTrip.getTripStatus())){
             System.out.println("You cant Start this "+ tempTrip.getTripStatus() + " Trip");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(tripMapper.requestToResponseMapper(tempTrip));
         }
@@ -69,8 +74,8 @@ public class TripService {
     }
 
     public ResponseEntity<TripResponse> completeTrip(UUID tripId) {
-        Trip tempTrip = tripRepo.findTripByTripId(tripId);
-        if (!transitionService.isValid(tempTrip.getTripStatus(), TripStatus.COMPLETED)){
+        Trip tempTrip = getTripOrThrow(tripId);
+        if (!tripStateMachine.isValid(TripStatus.COMPLETED, tempTrip.getTripStatus())){
             System.out.println("You cant Complete this "+ tempTrip.getTripStatus() + " Trip");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(tripMapper.requestToResponseMapper(tempTrip));
         }
@@ -80,9 +85,9 @@ public class TripService {
     }
 
     public ResponseEntity<TripResponse> arrivedDriver(UUID tripId) {
-        Trip tempTrip = tripRepo.findTripByTripId(tripId);
+        Trip tempTrip = getTripOrThrow(tripId);
 //      Checking if this transition is valid
-        if (!transitionService.isValid(tempTrip.getTripStatus(), TripStatus.DRIVER_ARRIVED)){
+        if (!tripStateMachine.isValid(TripStatus.DRIVER_ARRIVED, tempTrip.getTripStatus())){
             System.out.println("You cant change this "+ tempTrip.getTripStatus() + " Trip to driver arrived");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(tripMapper.requestToResponseMapper(tempTrip));
         }
@@ -92,9 +97,9 @@ public class TripService {
     }
 
     public ResponseEntity<TripResponse> cancelTrip(UUID tripId){
-        Trip tempTrip = tripRepo.findTripByTripId(tripId);
+        Trip tempTrip = getTripOrThrow(tripId);
 //      Checking if this transition is valid
-        if (!transitionService.isValid(tempTrip.getTripStatus(), TripStatus.CANCELLED)){
+        if (!tripStateMachine.isValid(TripStatus.CANCELLED, tempTrip.getTripStatus())){
             System.out.println("You cant cancel this "+ tempTrip.getTripStatus() + " Trip");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(tripMapper.requestToResponseMapper(tempTrip));
         }

@@ -2,6 +2,7 @@ import { useEffect, useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuthContext } from '../context/AuthContext';
 import { MapPinPicker, type LatLng } from '../components/MapPinPicker';
+import { Terrain } from '../components/Terrain';
 import { cancelBooking, createBooking, getMyBookings } from '../api/scheduling';
 import type { Booking } from '../types/scheduling';
 import styles from './ScheduleHome.module.css';
@@ -104,7 +105,12 @@ export function ScheduleHome() {
 
       <div className={styles.card}>
         <h2 className={styles.cardHeading}>Your bookings</h2>
-        {bookings.length === 0 && <p className={styles.empty}>No upcoming bookings yet.</p>}
+        {bookings.length === 0 && (
+          <div className={styles.emptyState}>
+            <p className={styles.empty}>No upcoming bookings yet.</p>
+            <Terrain variant="mist" className={styles.emptyTerrain} />
+          </div>
+        )}
         {bookings.length > 0 && (
           <ul className={styles.bookingList}>
             {bookings.map((booking) => (

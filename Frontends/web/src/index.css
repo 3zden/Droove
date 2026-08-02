@@ -58,6 +58,10 @@
   --glass-bg: rgba(255, 255, 255, 0.82);
   --glass-border: rgba(9, 9, 11, 0.06);
   --map-filter: grayscale(1) contrast(1.04) brightness(1.02);
+
+  /* Decorative terrain - the one place colour is allowed into the zinc palette.
+     The renders are lit for a light page, so light mode shows them untouched. */
+  --terrain-filter: none;
   color-scheme: light;
 }
 
@@ -91,6 +95,9 @@
   --glass-bg: rgba(9, 9, 11, 0.78);
   --glass-border: rgba(255, 255, 255, 0.08);
   --map-filter: grayscale(1) invert(1) brightness(0.92) contrast(0.88);
+
+  /* Same hills after dusk - one filter instead of a second set of files. */
+  --terrain-filter: brightness(0.46) saturate(0.82) contrast(1.06);
   color-scheme: dark;
 }
 

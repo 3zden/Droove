@@ -1,0 +1,28 @@
+.img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* purely decorative - never eat a tap meant for the content above it */
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  filter: var(--terrain-filter);
+}
+
+/* The keyed-out sky is this variant's fade, so it needs no mask - just an anchor. */
+.band {
+  object-position: center bottom;
+}
+
+.moss {
+  object-position: center;
+  mask-image: linear-gradient(to right, transparent, #000 42%);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 42%);
+}
+
+.mist {
+  object-position: center bottom;
+  mask-image: linear-gradient(to bottom, transparent, #000 58%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 58%);
+}

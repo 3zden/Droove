@@ -25,7 +25,36 @@
   padding: 18px;
 }
 
-/* Balance hero - the one number that matters, at display scale */
+/* Balance hero - the one number that matters, at display scale, with the
+   terrain bleeding off the right edge the way awesomic frames its feature cards */
+.balanceCard {
+  position: relative;
+  overflow: hidden;
+  min-height: 190px;
+  display: flex;
+  align-items: center;
+}
+
+.balanceMain {
+  position: relative;
+  z-index: 1;
+  /* keep the number clear of the artwork on narrow cards */
+  max-width: 62%;
+}
+
+/* the leftward fade lives in the Terrain component; this only places the box */
+.balanceTerrain {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 56%;
+}
+
+.refresh {
+  margin-top: 18px;
+}
+
 .balanceLabel {
   font-size: 14px;
   color: var(--text-muted);

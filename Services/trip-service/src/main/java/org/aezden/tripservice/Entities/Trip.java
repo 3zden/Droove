@@ -30,6 +30,7 @@ public class Trip {
     private TripStatus tripStatus;
 
     public Trip(UUID userId, float pickUpLat, float pickUpLon, float destinationLat, float destinationLon){
+        this.userId = userId;
         this.tripStatus = TripStatus.REQUESTED;
         this.pickUpLat = pickUpLat;
         this.destinationLat = destinationLat;

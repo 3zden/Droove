@@ -1,6 +1,6 @@
 # Droove
 
-A ride-hailing platform built as an event-driven microservice system — the kind of architecture behind Uber/Lyft, built from scratch as a guided learning project: Spring Boot services own transactional state (users, trips, matching, pricing, payments, scheduling), FastAPI services own high-concurrency sockets (GPS ingest, notification fan-out), Kafka decouples the trip lifecycle from everything reacting to it, and Redis backs the geo index, the scheduling queue, offer expiry, and gateway rate limiting.
+A ride-hailing platform built as an event-driven microservice system — the kind of architecture behind Uber/Lyft, built from scratch: Spring Boot services own transactional state (users, trips, matching, pricing, payments, scheduling), FastAPI services own high-concurrency sockets (GPS ingest, notification fan-out), Kafka decouples the trip lifecycle from everything reacting to it, and Redis backs the geo index, the scheduling queue, offer expiry, and gateway rate limiting.
 
 ## Architecture
 
