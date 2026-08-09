@@ -35,7 +35,8 @@ public class BookingService {
         return ResponseEntity.status(HttpStatus.CREATED).body(bookingResponse);
     }
 
-    public ResponseEntity<List<BookingResponse>> getBookings() {
+    public ResponseEntity<List<BookingResponse>> getBookings(UUID riderId) {
+        return ResponseEntity.ok(bookingRepo.getAllByRiderId(riderId));
     }
 
     public ResponseEntity<BookingResponse> cancelBooking(UUID bookingId) {
