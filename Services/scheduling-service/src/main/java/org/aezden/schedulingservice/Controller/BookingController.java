@@ -1,10 +1,8 @@
 package org.aezden.schedulingservice.Controller;
 
-
 import org.aezden.schedulingservice.DTOs.BookingRequest;
 import org.aezden.schedulingservice.DTOs.BookingResponse;
 import org.aezden.schedulingservice.Services.BookingService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,8 +22,8 @@ public class BookingController {
     }
 
     @GetMapping("/bookings/mine")
-    public ResponseEntity<List<BookingResponse>> getBookings(){
-        return bookingService.getBookings();
+    public ResponseEntity<List<BookingResponse>> getBookings(UUID riderId){
+        return bookingService.getBookings(riderId);
     }
 
     @PostMapping("/bookings/{bookingId}/cancel")
