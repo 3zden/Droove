@@ -1,20 +1,27 @@
 package org.aezden.tripservice.Ports;
 
 
+import lombok.RequiredArgsConstructor;
+import org.aezden.tripservice.Events.TripEvent;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.KafkaHeaders;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
 @Component
+@RequiredArgsConstructor
 public class TripEventPublisher {
-    private final KafkaTemplate<String, Object> kafkaTemplate;
+    private final KafkaTemplate<String, TripEvent> kafkaTemplate;
 
-    public TripEventPublisher(KafkaTemplate<String, Object> kafkaTemplate){
-        this.kafkaTemplate = kafkaTemplate;
-    }
+    public void sendTripMessage(TripEvent tripEvent) {
+        Message<TripEvent> message = MessageBuilder
+                .withPayload(tripEvent)
+                .setHeader(KafkaHeaders.TOPIC, "trip-topic")
+                .build();
 
-    public void publish(UUID tripId, Object event){
-        kafkaTemplate.send("trip-events", tripId.toString(), event);
+        kafkaTemplate.send(message);
     }
 }
