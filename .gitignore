@@ -43,6 +43,7 @@ __pycache__/
 
 # Claude-generated planning/teaching/explainer docs - not project deliverables
 BRIEFING*.md
+Services/location-gateway/LOCATION_GATEWAY_EXPLAINED_SIMPLE.md
 
 # Personal interview prep - study notes, not a project deliverable
 Docs/interview-prep/
