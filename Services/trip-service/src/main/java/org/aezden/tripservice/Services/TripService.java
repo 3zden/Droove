@@ -5,7 +5,9 @@ import org.aezden.tripservice.DTOs.TripResponse;
 import org.aezden.tripservice.Domain.TripStateMachine;
 import org.aezden.tripservice.Entities.Trip;
 import org.aezden.tripservice.Entities.TripStatus;
-import org.aezden.tripservice.Events.TripEventMapper;
+import org.aezden.tripservice.Events.MatchingEvent;
+import org.aezden.tripservice.Events.TripEvent;
+import org.aezden.tripservice.Events.EventMapper;
 import org.aezden.tripservice.Events.TripEventType;
 import org.aezden.tripservice.Exceptions.TripNotFoundException;
 import org.aezden.tripservice.Ports.TripEventPublisher;
@@ -23,20 +25,25 @@ public class TripService {
     private TripRepo tripRepo;
     private TripMapper tripMapper;
     private TripStateMachine tripStateMachine;
-    private TripEventPublisher tripEventPublisher;
-    private TripEventMapper tripEventMapper;
+
+//  Kafka fields
+    private TripEventPublisher<TripEvent> tripEventPublisher;
+    private EventMapper eventMapper;
+    private TripEventPublisher<MatchingEvent> matchingEventPublisher;
 
     public TripService(TripRepo tripRepo,
                        TripMapper tripMapper,
                        TripStateMachine tripStateMachine,
-                       TripEventPublisher tripEventPublisher,
-                       TripEventMapper tripEventMapper
+                       TripEventPublisher<TripEvent> tripEventPublisher,
+                       EventMapper eventMapper,
+                       TripEventPublisher<MatchingEvent> matchingEventPublisher
     ){
         this.tripMapper = tripMapper;
-        this.tripEventMapper = tripEventMapper;
+        this.eventMapper = eventMapper;
         this.tripRepo = tripRepo;
         this.tripStateMachine = tripStateMachine;
         this.tripEventPublisher = tripEventPublisher;
+        this.matchingEventPublisher = matchingEventPublisher;
     }
 
     public Trip getTripOrThrow(UUID tripId){
@@ -46,7 +53,8 @@ public class TripService {
 
     public TripResponse requestTrip(CreateTripRequest createTripRequest){
         Trip tempTrip = tripRepo.save(new Trip(createTripRequest.userId(), createTripRequest.pickUpLat(), createTripRequest.pickUpLon(), createTripRequest.destinationLat(),createTripRequest.destinationLon()));
-        tripEventPublisher.publish(tripEventMapper.toEvent(tempTrip, TripEventType.TRIP_REQUESTED));
+        tripEventPublisher.publish(eventMapper.toEvent(tempTrip, TripEventType.TRIP_REQUESTED));
+        matchingEventPublisher.publish(eventMapper.toMatchingEvent(tempTrip));
         return new TripResponse(
                 tempTrip.getTripId(),
                 tempTrip.getDestinationLat(),
@@ -83,7 +91,7 @@ public class TripService {
         tripRepo.save(tempTrip);
 
 //      publish events to kafka - topic = trip-topic
-        tripEventPublisher.publish(tripEventMapper.toEvent(tempTrip, TripEventType.TRIP_STARTED));
+        tripEventPublisher.publish(eventMapper.toEvent(tempTrip, TripEventType.TRIP_STARTED));
         return ResponseEntity.status(HttpStatus.CREATED).body(tripMapper.requestToResponseMapper(tempTrip));
     }
 
@@ -97,7 +105,7 @@ public class TripService {
         tripRepo.save(tempTrip);
 
 //      publish event kafka trip-topi
-        tripEventPublisher.publish(tripEventMapper.toEvent(tempTrip, TripEventType.TRIP_COMPLETED));
+        tripEventPublisher.publish(eventMapper.toEvent(tempTrip, TripEventType.TRIP_COMPLETED));
         return ResponseEntity.status(HttpStatus.CREATED).body(tripMapper.requestToResponseMapper(tempTrip));
     }
 
@@ -110,7 +118,7 @@ public class TripService {
         }
         tempTrip.setTripStatus(TripStatus.DRIVER_ARRIVED);
         tripRepo.save(tempTrip);
-        tripEventPublisher.publish(tripEventMapper.toEvent(tempTrip, TripEventType.DRIVER_ARRIVED));
+        tripEventPublisher.publish(eventMapper.toEvent(tempTrip, TripEventType.DRIVER_ARRIVED));
         return ResponseEntity.status(HttpStatus.CREATED).body(tripMapper.requestToResponseMapper(tempTrip));
     }
 
@@ -123,7 +131,7 @@ public class TripService {
         }
         tempTrip.setTripStatus(TripStatus.CANCELLED);
         tripRepo.save(tempTrip);
-        tripEventPublisher.publish(tripEventMapper.toEvent(tempTrip, TripEventType.TRIP_CANCELED));
+        tripEventPublisher.publish(eventMapper.toEvent(tempTrip, TripEventType.TRIP_CANCELED));
         return ResponseEntity.status(HttpStatus.OK).body(tripMapper.requestToResponseMapper(tempTrip));
     }
 }

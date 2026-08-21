@@ -15,4 +15,11 @@ public class KafkaTopicConfig {
                 .name("trip-topic")
                 .build();
     }
+
+    @Bean
+    public NewTopic matchingTopic(){
+        return TopicBuilder
+                .name("matching-topic")
+                .build();
+    }
 }
