@@ -6,7 +6,8 @@ import org.springframework.stereotype.Component;
 import java.util.UUID;
 
 @Component
-public class TripEventMapper {
+public class EventMapper {
+//  for Trip events
     public TripEvent toEvent(Trip trip, TripEventType type){
         return new TripEvent(
                 UUID.randomUUID(),
@@ -16,5 +17,18 @@ public class TripEventMapper {
                 trip.getDriverId(),
                 trip.getFare(),
                 trip.getCompletedAt());
+    }
+//  for matching events
+
+    public MatchingEvent toMatchingEvent(Trip trip){
+        return new MatchingEvent(
+                UUID.randomUUID(),
+                trip.getTripId(),
+                trip.getUserId(),
+                trip.getPickUpLat(),
+                trip.getPickUpLon(),
+                trip.getDestinationLat(),
+                trip.getDestinationLon(),
+                trip.getFare());
     }
 }

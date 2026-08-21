@@ -16,4 +16,6 @@ public class TripMapper {
                 trip.getFare(),
                 trip.getTripStatus());
     }
+
+
 }
