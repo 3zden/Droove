@@ -1,4 +1,15 @@
 package org.aezden.matchingservice.Dto;
 
-public class MatchRequest {
+import java.util.UUID;
+
+public record MatchRequest (
+        UUID eventId,
+        UUID tripId,
+        UUID userId,
+        float pickUpLat,
+        float pickUpLng,
+        float destinationLat,
+        float destinationLng,
+        long fare
+) {
 }

@@ -19,7 +19,7 @@ public class KafkaTopicConfig {
     @Bean
     public NewTopic matchingTopic(){
         return TopicBuilder
-                .name("matching-topic")
+                .name("match-requests")
                 .build();
     }
 }

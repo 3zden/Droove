@@ -2,7 +2,7 @@ package org.aezden.tripservice.Events;
 
 import java.util.UUID;
 
-public record MatchingEvent (
+public record MatchRequest (
         UUID eventId,
         UUID tripId,
         UUID userId,

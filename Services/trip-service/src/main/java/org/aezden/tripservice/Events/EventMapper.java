@@ -20,8 +20,8 @@ public class EventMapper {
     }
 //  for matching events
 
-    public MatchingEvent toMatchingEvent(Trip trip){
-        return new MatchingEvent(
+    public MatchRequest toMatchingEvent(Trip trip){
+        return new MatchRequest(
                 UUID.randomUUID(),
                 trip.getTripId(),
                 trip.getUserId(),
