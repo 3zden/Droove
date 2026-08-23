@@ -1,4 +1,4 @@
-package org.aezden.tripservice.Config;
+package org.aezden.matchingservice.Config;
 
 
 import org.apache.kafka.clients.admin.NewTopic;
@@ -7,19 +7,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.TopicBuilder;
 
 @Configuration
-public class KafkaTopicConfig {
+public class KafkaConfig {
 
     @Bean
-    public NewTopic tripsTopic(){
+    public NewTopic notificationTopic(){
         return TopicBuilder
-                .name("trip-topic")
-                .build();
-    }
-
-    @Bean
-    public NewTopic matchingTopic(){
-        return TopicBuilder
-                .name("match-requests")
+                .name("notifications")
                 .build();
     }
 }

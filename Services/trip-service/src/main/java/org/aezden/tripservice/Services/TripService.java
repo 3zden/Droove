@@ -5,7 +5,7 @@ import org.aezden.tripservice.DTOs.TripResponse;
 import org.aezden.tripservice.Domain.TripStateMachine;
 import org.aezden.tripservice.Entities.Trip;
 import org.aezden.tripservice.Entities.TripStatus;
-import org.aezden.tripservice.Events.MatchingEvent;
+import org.aezden.tripservice.Events.MatchRequest   ;
 import org.aezden.tripservice.Events.TripEvent;
 import org.aezden.tripservice.Events.EventMapper;
 import org.aezden.tripservice.Events.TripEventType;
@@ -29,14 +29,14 @@ public class TripService {
 //  Kafka fields
     private TripEventPublisher<TripEvent> tripEventPublisher;
     private EventMapper eventMapper;
-    private TripEventPublisher<MatchingEvent> matchingEventPublisher;
+    private TripEventPublisher<MatchRequest> matchingEventPublisher;
 
     public TripService(TripRepo tripRepo,
                        TripMapper tripMapper,
                        TripStateMachine tripStateMachine,
                        TripEventPublisher<TripEvent> tripEventPublisher,
                        EventMapper eventMapper,
-                       TripEventPublisher<MatchingEvent> matchingEventPublisher
+                       TripEventPublisher<MatchRequest> matchingEventPublisher
     ){
         this.tripMapper = tripMapper;
         this.eventMapper = eventMapper;
