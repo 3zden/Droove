@@ -40,10 +40,11 @@ public class MatchingService {
 
 //  Searching Nearest available drivers
     public List<DriverDto> findNearestDrivers(double lat, double lng){
+
         Circle circle = new Circle(
                 new Point(lat, lng),
-                new Distance(3, Metrics.KILOMETERS)
-        );
+                new Distance(3, Metrics.KILOMETERS));
+
         GeoResults<RedisGeoCommands.GeoLocation<String>> result =
                 stringRedisTemplate.opsForGeo()
                         .radius(
@@ -51,8 +52,8 @@ public class MatchingService {
                                 circle,
                                 RedisGeoCommands.GeoRadiusCommandArgs.newGeoRadiusArgs()
                                         .includeDistance()
-                                        .sortAscending()
-                        );
+                                        .sortAscending());
+
         return result.getContent()
                 .stream().map(res -> new DriverDto(
                         UUID.fromString(res.getContent().getName()),
