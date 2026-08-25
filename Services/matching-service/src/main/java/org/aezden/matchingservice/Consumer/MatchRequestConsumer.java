@@ -16,6 +16,6 @@ public class MatchRequestConsumer {
     @KafkaListener(topics = "match-requests", groupId = "matching-group")
     public void consumeEvents(MatchRequest matchRequest){
         log.info("were now starting consuming match-requests events" + matchRequest.toString());
-        matchingService.match();
+        matchingService.match(matchRequest);
     }
 }

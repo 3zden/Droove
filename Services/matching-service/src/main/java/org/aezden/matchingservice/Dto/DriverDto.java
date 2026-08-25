@@ -1,4 +1,6 @@
 package org.aezden.matchingservice.Dto;
 
-public record DriverDto() {
+import java.util.UUID;
+
+public record DriverDto(UUID driverId, double lat, double lng) {
 }
