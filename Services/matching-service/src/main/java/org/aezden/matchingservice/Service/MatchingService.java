@@ -29,10 +29,11 @@ public class MatchingService {
 //  selecting and sending each driver the ride offer
     public void match(MatchRequest matchRequest) {
         List<DriverDto> selectedDrivers = findNearestDrivers(matchRequest.pickUpLat(), matchRequest.pickUpLng());
-        Offer offer = createOffer(matchRequest);
+        Offer offer;
         for(DriverDto driver: selectedDrivers){
+            offer = createOffer(matchRequest, driver.driverId());
             System.out.printf("driver with id" + driver.driverId() + "in position" + driver.lat() +driver.lng());
-//          sending offer for each driver
+//          sending the trip offer to the driver
             notificationPublisher.publish(driver.driverId(), offer);
 
         }
@@ -64,9 +65,10 @@ public class MatchingService {
     }
 
 //  Creating Offer
-    public Offer createOffer(MatchRequest matchRequest){
+    public Offer createOffer(MatchRequest matchRequest, UUID driverId){
         return new Offer(
                 matchRequest.tripId(),
+                driverId,
                 matchRequest.userId(),
                 matchRequest.pickUpLat(),
                 matchRequest.pickUpLng(),

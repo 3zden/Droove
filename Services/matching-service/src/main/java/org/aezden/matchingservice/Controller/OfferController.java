@@ -3,7 +3,6 @@ package org.aezden.matchingservice.Controller;
 import lombok.RequiredArgsConstructor;
 import org.aezden.matchingservice.Model.Offer;
 import org.aezden.matchingservice.Service.MatchingService;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;

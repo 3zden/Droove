@@ -13,6 +13,7 @@ public class Offer {
 
     private UUID offerId;
     private UUID tripId;
+    private UUID driverId;
     private UUID riderId;
     private float pickUpLat;
     private float pickUpLng;
@@ -23,6 +24,7 @@ public class Offer {
 
     public Offer(
             UUID tripId,
+            UUID driverId,
             UUID riderId,
             float pickUpLat,
             float pickUpLng,
@@ -31,6 +33,7 @@ public class Offer {
             long fare
     ){
         this.offerId = UUID.randomUUID();
+        this.driverId = driverId;
         this.tripId = tripId;
         this.riderId = riderId;
         this.pickUpLat = pickUpLat;
