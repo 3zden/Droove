@@ -15,7 +15,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @RequestMapping("/api/matching/offers")
 public class OfferController {
-    private MatchingService matchingService;
+    final private MatchingService matchingService;
 
     @PostMapping("/{offerId}/accept")
     public ResponseEntity<Offer> acceptOffer(@PathVariable UUID offerId){

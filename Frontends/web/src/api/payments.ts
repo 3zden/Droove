@@ -4,17 +4,34 @@ import type { LedgerTransaction, WalletBalance } from '../types/payments';
 // see BRIEFING-FRONTEND.md.
 export const PAYMENTS_API_URL = import.meta.env.VITE_PAYMENTS_API_URL ?? 'http://localhost:8105';
 
-// EXERCISE (see BRIEFING-FRONTEND.md): GET `${PAYMENTS_API_URL}/wallet`, needs the auth token.
-export async function getWallet(_token: string): Promise<WalletBalance> {
-  throw new Error('getWallet() is not wired up yet - see BRIEFING-FRONTEND.md');
+function authHeaders(token: string): HeadersInit {
+  return { Authorization: `Bearer ${token}` };
 }
 
-// EXERCISE: POST `${PAYMENTS_API_URL}/wallet/topup` with `{ amountCents }`.
-export async function topUp(_token: string, _amountCents: number): Promise<WalletBalance> {
-  throw new Error('topUp() is not wired up yet - see BRIEFING-FRONTEND.md');
+async function request<T>(token: string, input: RequestInfo | URL, init: RequestInit = {}): Promise<T> {
+  const response = await fetch(input, {
+    ...init,
+    headers: { ...authHeaders(token), 'Content-Type': 'application/json', ...(init.headers ?? {}) },
+  });
+  if (!response.ok) {
+    throw new Error(`Payment request failed (${response.status})`);
+  }
+  return response.json() as Promise<T>;
 }
 
-// EXERCISE: GET `${PAYMENTS_API_URL}/ledger/trip/{tripId}`.
-export async function getTripLedger(_token: string, _tripId: string): Promise<LedgerTransaction[]> {
-  throw new Error('getTripLedger() is not wired up yet - see BRIEFING-FRONTEND.md');
+export function getWallet(token: string): Promise<WalletBalance> {
+  return request<WalletBalance>(token, `${PAYMENTS_API_URL}/wallet`, { method: 'GET' });
+}
+
+export function topUp(token: string, amountCents: number): Promise<WalletBalance> {
+  return request<WalletBalance>(token, `${PAYMENTS_API_URL}/wallet/topup`, {
+    method: 'POST',
+    body: JSON.stringify({ amountCents }),
+  });
+}
+
+export function getTripLedger(token: string, tripId: string): Promise<LedgerTransaction[]> {
+  return request<LedgerTransaction[]>(token, `${PAYMENTS_API_URL}/ledger/trip/${encodeURIComponent(tripId)}`, {
+    method: 'GET',
+  });
 }

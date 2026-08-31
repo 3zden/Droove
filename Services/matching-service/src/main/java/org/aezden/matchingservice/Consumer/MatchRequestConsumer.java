@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @RequiredArgsConstructor
 public class MatchRequestConsumer {
-    private MatchingService matchingService;
+    final private MatchingService matchingService;
 
     @KafkaListener(topics = "match-requests", groupId = "matching-group")
     public void consumeEvents(MatchRequest matchRequest){
