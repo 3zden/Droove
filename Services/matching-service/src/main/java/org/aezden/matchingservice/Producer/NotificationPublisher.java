@@ -12,7 +12,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class NotificationPublisher {
-    KafkaTemplate<String, Offer> kafkaTemplate;
+    final KafkaTemplate<String, Offer> kafkaTemplate;
 
     public void publish(UUID driverId, Offer offer) {
         kafkaTemplate.send(

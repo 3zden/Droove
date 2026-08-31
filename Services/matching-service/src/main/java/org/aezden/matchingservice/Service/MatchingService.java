@@ -21,10 +21,10 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class MatchingService {
-    private DriverRepo driverRepo;
-    private NotificationPublisher notificationPublisher;
-    private StringRedisTemplate stringRedisTemplate;
-    private RedisTemplate<String, Offer> redisTemplate;
+//  final private DriverRepo driverRepo;
+    final private NotificationPublisher notificationPublisher;
+    final private StringRedisTemplate stringRedisTemplate;
+    final private RedisTemplate<String, Offer> redisTemplate;
 
 //  selecting and sending each driver the ride offer
     public void match(MatchRequest matchRequest) {
