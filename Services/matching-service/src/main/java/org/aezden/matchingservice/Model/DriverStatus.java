@@ -1,4 +1,7 @@
 package org.aezden.matchingservice.Model;
 
-public record DriverStatus() {
+public enum DriverStatus {
+    AVAILABLE,
+    BUSY,
+    RESERVED
 }
