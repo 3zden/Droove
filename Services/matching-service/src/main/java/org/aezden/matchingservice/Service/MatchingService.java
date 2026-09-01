@@ -24,17 +24,21 @@ import java.util.UUID;
 public class MatchingService {
     //  final private DriverRepo driverRepo;
     final private NotificationPublisher notificationPublisher;
-    private StringRedisTemplate stringRedisTemplate;
-//    final private DriverStatus driverStatus;
-    private RedisTemplate<String, Offer> redisTemplate;
+    final private StringRedisTemplate stringRedisTemplate;
+    final private RedisTemplate<String, Offer> redisTemplate;
 
 //  selecting and sending each driver the ride offer
     public void match(MatchRequest matchRequest) {
         List<DriverDto> selectedDrivers = findNearestDrivers(matchRequest.pickUpLat(), matchRequest.pickUpLng());
-        Offer offer;
         for(DriverDto driver: selectedDrivers){
-            offer = createOffer(matchRequest, driver.driverId());
-            System.out.printf("driver with id" + driver.driverId() + "in position" + driver.lat() +driver.lng());
+            Offer offer = createOffer(matchRequest, driver.driverId());
+            String offerKey = "offer" + offer.getOfferId().toString();
+            redisTemplate.opsForValue().set(
+                    offerKey,
+                    offer,
+                    Duration.ofSeconds(30)
+            );
+            System.out.printf("driver with id: " + driver.driverId() + "in position" + driver.lat() +driver.lng());
 //          sending the trip offer to the driver
             notificationPublisher.publish(driver.driverId(), offer);
 
@@ -79,7 +83,7 @@ public class MatchingService {
 
 //  Creating Offer
     public Offer createOffer(MatchRequest matchRequest, UUID driverId){
-        Offer offer =  new Offer(
+        return new Offer(
                 matchRequest.tripId(),
                 driverId,
                 matchRequest.userId(),
@@ -89,12 +93,6 @@ public class MatchingService {
                 matchRequest.destinationLng(),
                 matchRequest.fare()
         );
-        redisTemplate.opsForValue().set(
-                "offer" + offer.getOfferId().toString(),
-                offer,
-                Duration.ofSeconds(30)
-        );
-        return offer;
     }
 
 
