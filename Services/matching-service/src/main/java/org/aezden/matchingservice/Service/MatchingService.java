@@ -15,6 +15,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,9 +24,9 @@ import java.util.UUID;
 public class MatchingService {
     //  final private DriverRepo driverRepo;
     final private NotificationPublisher notificationPublisher;
-    final private StringRedisTemplate stringRedisTemplate;
+    private StringRedisTemplate stringRedisTemplate;
 //    final private DriverStatus driverStatus;
-    final private RedisTemplate<String, Offer> redisTemplate;
+    private RedisTemplate<String, Offer> redisTemplate;
 
 //  selecting and sending each driver the ride offer
     public void match(MatchRequest matchRequest) {
@@ -78,7 +79,7 @@ public class MatchingService {
 
 //  Creating Offer
     public Offer createOffer(MatchRequest matchRequest, UUID driverId){
-        return new Offer(
+        Offer offer =  new Offer(
                 matchRequest.tripId(),
                 driverId,
                 matchRequest.userId(),
@@ -88,6 +89,12 @@ public class MatchingService {
                 matchRequest.destinationLng(),
                 matchRequest.fare()
         );
+        redisTemplate.opsForValue().set(
+                "offer" + offer.getOfferId().toString(),
+                offer,
+                Duration.ofSeconds(30)
+        );
+        return offer;
     }
 
 
