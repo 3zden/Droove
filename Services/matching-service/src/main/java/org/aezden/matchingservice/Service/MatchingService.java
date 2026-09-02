@@ -1,6 +1,7 @@
 package org.aezden.matchingservice.Service;
 
 
+import org.aezden.matchingservice.Model.DriverStatus;
 import org.aezden.matchingservice.Model.OfferStatus;
 import org.springframework.data.redis.connection.RedisGeoCommands;
 import lombok.RequiredArgsConstructor;
@@ -8,20 +9,20 @@ import org.aezden.matchingservice.Dto.DriverDto;
 import org.aezden.matchingservice.Dto.MatchRequest;
 import org.aezden.matchingservice.Model.Offer;
 import org.aezden.matchingservice.Producer.NotificationPublisher;
-import org.aezden.matchingservice.Repo.DriverRepo;
 import org.springframework.data.geo.*;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class MatchingService {
-//  final private DriverRepo driverRepo;
+    //  final private DriverRepo driverRepo;
     final private NotificationPublisher notificationPublisher;
     final private StringRedisTemplate stringRedisTemplate;
     final private RedisTemplate<String, Offer> redisTemplate;
@@ -29,10 +30,15 @@ public class MatchingService {
 //  selecting and sending each driver the ride offer
     public void match(MatchRequest matchRequest) {
         List<DriverDto> selectedDrivers = findNearestDrivers(matchRequest.pickUpLat(), matchRequest.pickUpLng());
-        Offer offer;
         for(DriverDto driver: selectedDrivers){
-            offer = createOffer(matchRequest, driver.driverId());
-            System.out.printf("driver with id" + driver.driverId() + "in position" + driver.lat() +driver.lng());
+            Offer offer = createOffer(matchRequest, driver.driverId());
+            String offerKey = "offer" + offer.getOfferId().toString();
+            redisTemplate.opsForValue().set(
+                    offerKey,
+                    offer,
+                    Duration.ofSeconds(30)
+            );
+            System.out.printf("driver with id: " + driver.driverId() + "in position" + driver.lat() +driver.lng());
 //          sending the trip offer to the driver
             notificationPublisher.publish(driver.driverId(), offer);
 
@@ -43,25 +49,36 @@ public class MatchingService {
     public List<DriverDto> findNearestDrivers(double lat, double lng){
 
         Circle circle = new Circle(
-                new Point(lat, lng),
+                new Point(lng, lat),
                 new Distance(3, Metrics.KILOMETERS));
 
         GeoResults<RedisGeoCommands.GeoLocation<String>> result =
                 stringRedisTemplate.opsForGeo()
                         .radius(
-                                "drivers:locations",
+                                "drivers:geo",
                                 circle,
                                 RedisGeoCommands.GeoRadiusCommandArgs.newGeoRadiusArgs()
                                         .includeDistance()
                                         .sortAscending());
 
         return result.getContent()
-                .stream().map(res -> new DriverDto(
-                        UUID.fromString(res.getContent().getName()),
-                        res.getContent().getPoint().getX(),
-                        res.getContent().getPoint().getY())
-                )
+                .stream()
+                .map(res -> {
+                    UUID driverId = UUID.fromString(res.getContent().getName());
+                    return new DriverDto(
+                            driverId,
+                            res.getContent().getPoint().getX(),
+                            res.getContent().getPoint().getY()
+                    );
+                })
+                .filter(driver -> isAvailable(driver.driverId()))
                 .toList();
+    }
+    public boolean isAvailable(UUID driverId){
+        String status = stringRedisTemplate.opsForValue().get(
+                "driver:" + driverId + ":status"
+        );
+        return status.equals(DriverStatus.AVAILABLE.toString());
     }
 
 //  Creating Offer
