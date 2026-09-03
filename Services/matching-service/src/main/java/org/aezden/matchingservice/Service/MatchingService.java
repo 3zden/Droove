@@ -1,7 +1,9 @@
 package org.aezden.matchingservice.Service;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.aezden.matchingservice.Model.DriverStatus;
+import org.aezden.matchingservice.Model.MatchState;
 import org.aezden.matchingservice.Model.OfferStatus;
 import org.springframework.data.redis.connection.RedisGeoCommands;
 import lombok.RequiredArgsConstructor;
@@ -21,31 +23,81 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MatchingService {
     //  final private DriverRepo driverRepo;
     final private NotificationPublisher notificationPublisher;
     final private StringRedisTemplate stringRedisTemplate;
-    final private RedisTemplate<String, Offer> redisTemplate;
+    final private RedisTemplate<String, Offer> redisOfferTemplate;
+    final private RedisTemplate<String, MatchState> redisMatchTemplate;
 
 //  selecting and sending each driver the ride offer
     public void match(MatchRequest matchRequest) {
-        List<DriverDto> selectedDrivers = findNearestDrivers(matchRequest.pickUpLat(), matchRequest.pickUpLng());
-        for(DriverDto driver: selectedDrivers){
-            Offer offer = createOffer(matchRequest, driver.driverId());
-            String offerKey = "offer" + offer.getOfferId().toString();
-            redisTemplate.opsForValue().set(
-                    offerKey,
-                    offer,
-                    Duration.ofSeconds(30)
-            );
-            System.out.printf("driver with id: " + driver.driverId() + "in position" + driver.lat() +driver.lng());
-//          sending the trip offer to the driver
-            notificationPublisher.publish(driver.driverId(), offer);
 
+        List<DriverDto> selectedDrivers = findNearestDrivers(matchRequest.pickUpLat(), matchRequest.pickUpLng());
+
+//      No Drivers Found
+        if (selectedDrivers.isEmpty()){
+            log.info("No drivers Found for trip :{}", matchRequest.tripId());
+            return;
         }
+
+//      Create a matchState track Current state of the match request
+        MatchState matchState = new MatchState(
+                matchRequest.tripId(),
+                selectedDrivers,
+                0,
+                null);
+
+//      store the current state in redis
+        redisMatchTemplate.opsForValue().set(
+                "match:" + matchState.getTripId(),
+                matchState
+        );
+        sendOfferToCurrentDriver(matchState, matchRequest);
     }
 
-//  Searching Nearest available drivers
+    private void sendOfferToCurrentDriver(MatchState matchState, MatchRequest matchRequest) {
+
+//      exceed the selected drivers
+        if (matchState.getCurrentDriver() >= matchState.getSelectedDrivers().size()){
+            log.info("NO DRIVER FOUND");
+            return;
+        }
+
+//      current driver become unavailable
+        UUID currentDriverId = matchState.getSelectedDrivers().get(matchState.getCurrentDriver()).driverId();
+        if (!isAvailable(currentDriverId)){
+            log.info("DRIVER WITH ID: {} IS BUSY...",currentDriverId );
+            matchState.setCurrentDriver(matchState.getCurrentDriver() + 1);
+            sendOfferToCurrentDriver(matchState, matchRequest);
+            return;
+        }
+
+        Offer offer = createOffer(
+                matchRequest, currentDriverId
+        );
+
+//      store the new state of matchState with new offerId
+        matchState.setCurrentOfferId(offer.getOfferId());
+        redisMatchTemplate.opsForValue().set(
+                "match:" + matchState.getTripId(),
+                matchState
+        );
+
+
+//      store the offer in redis with 15s TTL
+        redisOfferTemplate.opsForValue().set(
+                "offer:" + offer.getOfferId(),
+                offer,
+                Duration.ofSeconds(15)
+        );
+
+//      publish the notif
+        notificationPublisher.publish(currentDriverId, offer);
+    }
+
+    //   Searching Nearest available drivers
     public List<DriverDto> findNearestDrivers(double lat, double lng){
 
         Circle circle = new Circle(
@@ -74,6 +126,8 @@ public class MatchingService {
                 .filter(driver -> isAvailable(driver.driverId()))
                 .toList();
     }
+
+//  Driver availability
     public boolean isAvailable(UUID driverId){
         String status = stringRedisTemplate.opsForValue().get(
                 "driver:" + driverId + ":status"
@@ -96,18 +150,20 @@ public class MatchingService {
     }
 
 
-    public ResponseEntity<Offer> acceptOffer(UUID offerId) {
-        Offer offer = redisTemplate.opsForValue().getAndPersist(offerId.toString());
-        offer.setOfferStatus(OfferStatus.ACCEPTED);
-        redisTemplate.opsForValue().set(offerId.toString(), offer);
-        return ResponseEntity.ok(offer);
-    }
+//    public ResponseEntity<Offer> acceptOffer(UUID offerId) {
+//        Offer offer = redisTemplate.opsForValue().getAndPersist(offerId.toString());
+//        offer.setOfferStatus(OfferStatus.ACCEPTED);
+//        redisTemplate.opsForValue().set(offerId.toString(), offer);
+//        return ResponseEntity.ok(offer);
+//    }
+//
+//    public ResponseEntity<Offer> declineOffer(UUID offerId) {
+//        Offer offer = redisTemplate.opsForValue().getAndPersist(offerId.toString());
+//        offer.setOfferStatus(OfferStatus.DECLINED);
+//        redisTemplate.opsForValue().set(offerId.toString(), offer);
+//        return ResponseEntity.ok(offer);
+//    }
 
-    public ResponseEntity<Offer> declineOffer(UUID offerId) {
-        Offer offer = redisTemplate.opsForValue().getAndPersist(offerId.toString());
-        offer.setOfferStatus(OfferStatus.DECLINED);
-        redisTemplate.opsForValue().set(offerId.toString(), offer);
-        return ResponseEntity.ok(offer);
-    }
+
 
 }
