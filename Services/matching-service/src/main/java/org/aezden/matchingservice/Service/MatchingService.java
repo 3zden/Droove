@@ -78,8 +78,12 @@ public class MatchingService {
 //      current driver become unavailable
         UUID currentDriverId = matchState.getSelectedDrivers().get(matchState.getIndex()).driverId();
         if (!isAvailable(currentDriverId)){
-            log.info("DRIVER WITH ID: {} IS BUSY...",currentDriverId );
-            matchState.setIndex(matchState.getIndex() + 1);
+            log.info("DRIVER WITH ID: {} IS BUSY...", currentDriverId );
+            matchState.setIndex(matchState.getIndex()+1);
+            redisMatchTemplate.opsForValue().set(
+                    "match:" + tripId,
+                    matchState
+            );
             sendOfferToCurrentDriver(tripId);
             return;
         }
@@ -147,7 +151,7 @@ public class MatchingService {
         String status = stringRedisTemplate.opsForValue().get(
                 "driver:" + driverId + ":status"
         );
-        return status.equals(DriverStatus.AVAILABLE.toString());
+        return DriverStatus.AVAILABLE.toString().equals(status);
     }
 
 
@@ -171,16 +175,18 @@ public class MatchingService {
                 "match:" + tripId
         );
 
+        if (matchState == null)
+            return;
+
+        if (!offerId.equals(matchState.getCurrentOfferId())){
+            return;
+        }
+
         Offer offer = redisOfferTemplate.opsForValue().get(
                 "offer:" + matchState.getCurrentOfferId()
         );
 
-
         if (offer != null && offer.getOfferStatus() == OfferStatus.ACCEPTED){
-            return;
-        }
-
-        if (!offerId.equals(matchState.getCurrentOfferId())){
             return;
         }
 
@@ -192,9 +198,18 @@ public class MatchingService {
 
         String key = "offer:" + offerId;
         Offer offer = redisOfferTemplate.opsForValue().get(key);
+
         if (offer == null){
             log.info("THIS OFFER IS EXPIRED, YOU CANT ACCEPT IT");
             return ResponseEntity.notFound().build();
+        }
+        MatchState matchState = redisMatchTemplate.opsForValue().get(
+                "match:" + offer.getTripId()
+        );
+        if (matchState == null ||
+                !offerId.equals(matchState.getCurrentOfferId())) {
+
+            return ResponseEntity.badRequest().build();
         }
         offer.setOfferStatus(OfferStatus.ACCEPTED);
         redisOfferTemplate.opsForValue().set(key, offer);
